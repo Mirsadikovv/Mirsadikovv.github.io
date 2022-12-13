@@ -1,0 +1,111 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>HajimeWild</title>
+  <!-- <link rel="stylesheet" href="webexample/css/main.css"> -->
+  <link rel="stylesheet" href="{% static 'main.css' %}">
+
+  <link rel="shortcut icon" href="http://alkoholexpres.sk/wp-content/uploads/2015/12/parrot_ii_wide.png" type="image/x-icon" class="pot">
+</head>
+<body>
+  <header>
+    <div id="logo" onclick="slowScroll('#top')">
+      <span>HajimeWild</span>
+    </div>
+    <div id="about">
+      <a href="#" title="О нас" onclick="slowScroll('#main')">О нас</a>
+      <a href="#" onclick="slowScroll('#overview')" title="Наши услуги">Наши услуги</a>
+      <a href="#" onclick="slowScroll('#contacts')" title="Сделать заказ">Сделать заказ</a>
+      <a href="#" onclick="slowScroll('#faq')" title="Ответы на вопросы">FAQ</a>
+    </div>
+  </header>
+
+  <div id="top">
+    <h1>Птицы</h1>
+    <h3>наши верные друзья!</h3>
+  </div>
+
+  <div id="main">
+    <div class="intro">
+      <h2>Немного о нас!</h2>
+      <span>Большой выбор всего, что может пригодиться вашим питомцам</span>
+    </div>
+    <div class="text">
+      <span><h3>Более 20 лет работы в этой сфере. Опытные сотрудники. Только здоровые птицы и кормы наивысшего качества.</h3></span>
+    </div>
+  </div>
+
+  <div id="overview">
+    <h2>Наши услуги</h2>
+    <h4>с нами все проще</h4>
+
+    <div class="img">
+      <img src="https://mirpopugaev.ru/wp-content/uploads/2020/02/golorishie.jpg" alt="">
+      <span>Попугаи более 30 пород</span>
+    </div>
+    <div class="img">
+      <img src="https://foodforpets96.ru/image/cache/catalog/tovary-dlya-ptic/0/oad-iblock-259-2595cee6fbf9d11e93b4dc070addde14-1200x800.jpg" alt="">
+      <span>Кормы высшего качества и аксессуары для гнезда </span>
+    </div>
+  </div>
+
+  <div id="contacts">
+    <centre><h5>Меню заказов</h5></centre>
+    <form id="form_input">
+      <label for="name">Имя <span>*</span></label><br>
+      <input type="text" placeholder="Введите имя" name="name" id="name"><br>
+      <label for="email">Ваша почта <span>*</span></label><br>
+			<input type="email" placeholder="Введите email" name="email" id="email"><br>
+			<label for="message">Наименование товара <span>*</span></label><br>
+			<textarea placeholder="Введите название товара" name="message" id="message"></textarea><br>
+			<div id="mess_send" class="btn">Отправить</div>
+    </form>
+  </div>
+
+  <div id="faq">
+    <div>
+      <span class="title">Оплата</span><br>
+      <span class="heading">Как будет проходит оплата?</span>
+      <p>Оплата наличными.</p>
+      
+      <p>Оплата баковскими картами. UzCard,Humo,Visa </p>
+      <p>Оплата онлайн. PayMe,Click,Qiwi</p>
+    </div>
+    <div>
+      <span class="title">Информация</span><br>
+      <span class="heading">Что входит в услуги сервиса?</span>
+      <p> Клиент всгеда прав.</p>
+      <p> Бесплатная доставка.</p>
+      <p> Скидки постоянным клиентам.</p>
+    </div>
+    <div>
+      <span class="title">Гарантии</span><br>
+      <span class="heading">Какие гарантии есть?</span>
+      <p> Здоровые птицы.</p>
+      <p> Вакцина.</p>
+      <p> Товары высокого качества.</p>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    function slowScroll(id) {
+      $('html, body').animate({
+        scrollTop: $(id).offset().top
+      }, 500);
+    }
+
+    $(document).on("scroll", function () {
+      if($(window).scrollTop() === 0)
+        $("header").removeClass("fixed");
+      else
+        $("header").attr("class", "fixed");
+    });
+  </script>
+</body>
+</html>
