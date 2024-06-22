@@ -14,7 +14,8 @@
             background-color: #f4f4f4;
         }
         .container {
-            width: 80%;
+            width: 90%;
+            max-width: 800px;
             margin: 20px auto;
             background: #fff;
             padding: 20px;
@@ -66,6 +67,17 @@
             padding: 10px;
             border-radius: 5px;
         }
+        .contact, .about {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .contact div, .about div {
+            width: 48%;
+        }
+        .contact div p, .about div p {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
@@ -73,20 +85,26 @@
         <h1>Мирсадиков Миродил</h1>
         <div class="section contact-info">
             <h2 class="section-title">Контактная информация</h2>
-            <p>Email: <a href="mailto:mirsadikovmirodil5610056@gmail.com">mirsadikovmirodil5610056@gmail.com</a></p>
-            <p>Телефон: +998909410956</p>
-            <p><a href="https://t.me/mirsadikovm" target="_blank">Telegram</a></p>
-            <h2 class="section-title">О себе</h2>
-            <p>Адрес: Ташкент, Узбекистан</p>
-            <p>Дата рождения: 26 мая 2004</p>
+            <div class="contact">
+                <div>
+                    <p>Email: <a href="mailto:mirsadikovmirodil5610056@gmail.com">mirsadikovmirodil5610056@gmail.com</a></p>
+                    <p>Телефон: +998909410956</p>
+                    <p><a href="https://t.me/mirsadikovm" target="_blank">Telegram</a></p>
+                </div>
+                <div>
+                    <h2 class="section-title">О себе</h2>
+                    <p>Адрес: Ташкент, Узбекистан</p>
+                    <p>Дата рождения: 26 мая 2004</p>
+                </div>
+            </div>
         </div>
         <div class="section skills">
             <h2 class="section-title">Hard skills</h2>
             <ul>
-                <li>Golang(concurrency)</li>
+                <li>Golang (concurrency)</li>
                 <li>OS Linux</li>
                 <li>Gin</li>
-                <li>Rest API</li> 
+                <li>Rest API</li>
                 <li>gRPC</li>
                 <li>MySQL, PostgreSQL</li>
                 <li>NoSQL, Redis</li>
