@@ -48,6 +48,15 @@
       .second {
         width: 100%;
       }
+      .cards {
+        display: flex;
+        gap: 20px;
+      }
+      .card {
+        border: 1px solid;
+        padding: 10px;
+        border-radius: 10px;
+      }
       .contact-info,
       .skil ls,
       .education,
@@ -85,6 +94,13 @@
         background-color: #f2f2f2;
         padding: 10px;
         border-radius: 5px;
+      }
+      @media screen and (max-width: 810px) {
+        .contact-info,
+        .skills,
+        .cards {
+          flex-wrap: wrap;
+        }
       }
     </style>
   </head>
@@ -149,27 +165,33 @@
       </div>
       <div class="section experience">
         <h2 class="section-title">Курсы</h2>
-        <p><strong>Najot Ta'lim</strong></p>
-        <p>Foundation "Python, C"</p>
-        <p>Март 2022 - Июнь 2022</p>
-        <p>Навыки полученные из курса:</p>
-        <ul>
-          <li>Основы языка С</li>
-          <li>Основы языка Python</li>
-          <li>MySQL</li>
-        </ul>
-        <p><strong>UAcademy</strong></p>
-        <p>Bootcamp Golang</p>
-        <p>Март 2024 - Июнь 2024</p>
-        <p>Навыки полученные из курса:</p>
-        <ul>
-          <li>Golang</li>
-          <li>PostgreSQL</li>
-          <li>NoSQL</li>
-          <li>Rest API</li>
-          <li>Gin</li>
-          <li>Microservice gRPC</li>
-        </ul>
+        <div class="cards">
+          <div class="card">
+            <p><strong>Najot Ta'lim</strong></p>
+            <p>Foundation "Python, C"</p>
+            <p>Март 2022 - Июнь 2022</p>
+            <p>Навыки полученные из курса:</p>
+            <ul>
+              <li>Основы языка C</li>
+              <li>Основы языка Python</li>
+              <li>MySQL</li>
+            </ul>
+          </div>
+          <div class="card">
+            <p><strong>UAcademy</strong></p>
+            <p>Bootcamp Golang</p>
+            <p>Март 2024 - Июнь 2024</p>
+            <p>Навыки полученные из курса:</p>
+            <ul>
+              <li>Golang</li>
+              <li>PostgreSQL</li>
+              <li>NoSQL</li>
+              <li>Rest API</li>
+              <li>Gin</li>
+              <li>Microservice gRPC</li>
+            </ul>
+          </div>
+        </div>
       </div>
       <div class="section languages">
         <h2 class="section-title">Знание языков</h2>
