@@ -1,209 +1,111 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Резюме</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        line-height: 1.6;
-        margin: 0;
-        padding: 0;
-        color: #333;
-        background-color: #f4f4f4;
-      }
-      .container {
-        width: 80%;
-        margin: 20px auto;
-        background: #fff;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 10px;
-      }
-      h1,
-      h2 {
-        color: #333;
-      }
-      h1 {
-        border-bottom: 2px solid #333;
-        padding-bottom: 10px;
-      }
-      .section {
-        margin-bottom: 20px;
-      }
-      .section h2 {
-        margin-bottom: 10px;
-        color: #0056b3;
-        border-bottom: 1px solid #ddd;
-        padding-bottom: 5px;
-      }
-      .contact-info,
-      .skills {
-        display: flex;
-        gap: 20px;
-        align-items: start;
-      }
-      .first,
-      .second {
-        width: 100%;
-      }
-      .cards {
-        display: flex;
-        gap: 20px;
-      }
-      .card {
-        border: 1px solid;
-        padding: 10px;
-        border-radius: 10px;
-      }
-      .contact-info,
-      .skil ls,
-      .education,
-      .experience,
-      .languages {
-        margin-bottom: 20px;
-      }
-      .contact-info p,
-      .education p,
-      .experience p,
-      .languages p {
-        margin: 5px 0;
-      }
-      .skills ul,
-      .languages ul {
-        list-style: none;
-        padding: 0;
-      }
-      .skills ul li,
-      .languages ul li {
-        background: #f9f9f9;
-        margin: 5px 0;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-      }
-      .contact-info p a {
-        color: #0056b3;
-        text-decoration: none;
-      }
-      .contact-info p a:hover {
-        text-decoration: underline;
-      }
-      .section-title {
-        background-color: #f2f2f2;
-        padding: 10px;
-        border-radius: 5px;
-      }
-      @media screen and (max-width: 810px) {
-        .contact-info,
-        .skills,
-        .cards {
-          flex-wrap: wrap;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Мирсадиков Миродил</h1>
-      <div class="section contact-info">
-        <div class="first">
-          <h2 class="section-title">Контактная информация</h2>
-          <p>
-            Email:
-            <a href="mailto:mirsadikovmirodil5610056@gmail.com"
-              >mirsadikovmirodil5610056@gmail.com</a
-            >
-          </p>
-          <p>Телефон: +998909410956</p>
-          <p>Telegram: <a href="https://t.me/mirsadikovm" target="_blank">@mirsadikovm</a></p>
+<head>
+    <title>TVGO</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+    <div class="main" id="app">
+        <div v-if="showChannelsBlock" class="channels">
+            <div v-for="channel in channels" 
+                 :key="channel.id" 
+                 class="channel" 
+                 @click="onImageClick(channel)">
+                <img :src="channel.logoLink" alt="channel-img" class="channel-img">
+                <div class="channel-name">{{ channel.name }}</div>
+            </div>
+            <br><br>
+            <button @click="close_webapp">Закрыть</button>
         </div>
-        <div class="second">
-          <h2 class="section-title">О себе</h2>
-          <p>Адрес: Ташкент, Узбекистан</p>
-          <p>Дата рождения: 26 мая 2004</p>
+        <br>
+        
+        <div v-if="showPlayerBlock" class="player">
+            <h1>{{channel.name}}</h1>
+            <video id="my-video" class="video-js" controls preload="auto" width="640" height="264" data-setup='{}' ref="video"></video>
+            <button @click="back">Назад</button>
+            <br><br><br><br><br>
         </div>
-      </div>
-      <div class="section skills">
-        <div class="first">
-          <h2 class="section-title">Hard skills</h2>
-          <ul>
-            <li>Golang(concurrency)</li>
-            <li>OS Linux</li>
-            <li>Gin</li>
-            <li>Rest API</li>
-            <li>gRPC</li>
-            <li>MySQL, PostgreSQL</li>
-            <li>NoSQL, Redis</li>
-            <li>Git & GitHub</li>
-            <li>Kafka</li>
-            <li>Docker</li>
-          </ul>
-        </div>
-        <div class="second">
-          <h2 class="section-title">Soft skills</h2>
-          <ul>
-            <li>Коммуникабельность</li>
-            <li>Адаптивность</li>
-            <li>Критическое мышление</li>
-            <li>Решение проблем</li>
-            <li>Работа в команде</li>
-            <li>Креативность</li>
-            <li>Стрессоустойчивость</li>
-
-          </ul>
-        </div>
-      </div>
-      <div class="section education">
-        <h2 class="section-title">Образование</h2>
-        <p>
-          <strong
-            >Ташкентский университет информационных технологий имени Мухаммада
-            аль-Хоразми</strong
-          >
-        </p>
-        <p>Факультет Компьютерный инжиниринг</p>
-        <p>Сентябрь 2021 - Июнь 2025</p>
-      </div>
-      <div class="section experience">
-        <h2 class="section-title">Курсы</h2>
-        <div class="cards">
-          <div class="card">
-            <p><strong>Najot Ta'lim</strong></p>
-            <p>Foundation "Python, C"</p>
-            <p>Март 2022 - Июнь 2022</p>
-            <p>Навыки полученные из курса:</p>
-            <ul>
-              <li>Основы языка C</li>
-              <li>Основы языка Python</li>
-              <li>MySQL</li>
-            </ul>
-          </div>
-          <div class="card">
-            <p><strong>UAcademy</strong></p>
-            <p>Bootcamp Golang</p>
-            <p>Март 2024 - Июнь 2024</p>
-            <p>Навыки полученные из курса:</p>
-            <ul>
-              <li>Golang</li>
-              <li>PostgreSQL</li>
-              <li>NoSQL</li>
-              <li>Rest API</li>
-              <li>Gin</li>
-              <li>Microservice gRPC</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="section languages">
-        <h2 class="section-title">Знание языков</h2>
-        <ul>
-          <li>Узбекский - родной</li>
-          <li>Русский - свободное владение</li>
-          <li>Английский - продвинутый</li>
-        </ul>
-      </div>
     </div>
-  </body>
+
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                showChannelsBlock: true,
+                showPlayerBlock: false,
+                tg: window.Telegram.WebApp,
+                channels: [],
+                channel: null,
+                lock_img_src: 'lock-icon.png',
+                hls: null
+            },
+            mounted() {
+                if (this.tg.isExpanded == false) {
+                    this.tg.expand();
+                }
+                this.fetchChannels();
+            },
+            methods: {
+                async fetchChannels() {
+                    try {
+                        const response = await fetch('http://64.227.72.36:8083/api/v1/playlist/page?page=1&perpage=10');
+                        const data = await response.json();
+                        this.channels = data.data.filter(channel => channel.isVisible);
+                    } catch (error) {
+                        console.error('Error fetching channels:', error);
+                    }
+                },
+                onImageClick(channel) {
+                    this.channel = channel;
+                    this.showChannelsBlock = false;
+                    this.showPlayerBlock = true;
+                    
+                    this.$nextTick(() => {
+                        this.autoplay(channel);
+                    });
+                },
+                onLockedImageClick(channel) {
+                    this.tg.showAlert("Чтобы смотреть этот канал, вы должны иметь подписку");
+                },
+                autoplay(channel) {
+                    const streamUrl = channel.channelLink;
+
+                    if (streamUrl) {
+                        if (Hls.isSupported()) {
+                            if (this.hls) {
+                                this.hls.destroy();
+                            }
+                            this.hls = new Hls();
+                            this.hls.loadSource(streamUrl);
+                            this.hls.attachMedia(this.$refs.video);
+                            this.$refs.video.play();
+                        } else if (this.$refs.video.canPlayType('application/vnd.apple.mpegurl')) {
+                            this.$refs.video.src = streamUrl;
+                            this.$refs.video.addEventListener('loadedmetadata', () => {
+                                this.$refs.video.play();
+                            });
+                        }
+                    }
+                },
+                close_webapp() {
+                    this.tg.close();
+                },
+                back() {
+                    if (this.hls) {
+                        this.hls.destroy();
+                        this.hls = null;
+                    }
+                    this.showPlayerBlock = false;
+                    this.showChannelsBlock = true;
+                    this.channel = null;
+                }
+            }
+        });
+    </script>
+</body>
 </html>
