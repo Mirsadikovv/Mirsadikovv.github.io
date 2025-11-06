@@ -16,6 +16,13 @@
             <div class="profile-header">
                 <h1>Профиль пользователя</h1>
             </div>
+
+            <!-- Loading indicator -->
+            <div v-if="!user.id || user.id === 'demo123'" class="loading-message">
+                <div class="loader"></div>
+                <p>Загрузка данных профиля...</p>
+            </div>
+
             <div class="profile-card">
                 <div v-if="userPhoto" class="profile-photo">
                     <img :src="userPhoto" alt="User Photo">
@@ -29,41 +36,53 @@
                         <span class="info-label">Имя:</span>
                         <span class="info-value">{{ user.first_name || 'Не указано' }}</span>
                     </div>
-                    <div class="info-item">
+                    <div class="info-item" v-if="user.last_name">
                         <span class="info-label">Фамилия:</span>
-                        <span class="info-value">{{ user.last_name || 'Не указано' }}</span>
+                        <span class="info-value">{{ user.last_name }}</span>
                     </div>
-                    <div class="info-item">
+                    <div class="info-item" v-if="user.username">
                         <span class="info-label">Username:</span>
-                        <span class="info-value">{{ user.username ? '@' + user.username : 'Не указано' }}</span>
+                        <span class="info-value">@{{ user.username }}</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">ID:</span>
                         <span class="info-value">{{ user.id }}</span>
                     </div>
-                    <div class="info-item">
+                    <div class="info-item" v-if="user.language_code">
                         <span class="info-label">Язык:</span>
-                        <span class="info-value">{{ user.language_code || 'Не указано' }}</span>
+                        <span class="info-value">{{ user.language_code.toUpperCase() }}</span>
                     </div>
                     <div class="info-item">
                         <span class="info-label">Premium:</span>
-                        <span class="info-value">{{ user.is_premium ? 'Да' : 'Нет' }}</span>
+                        <span class="info-value">{{ user.is_premium ? '⭐ Да' : 'Нет' }}</span>
+                    </div>
+                    <div class="info-item" v-if="tg && tg.platform">
+                        <span class="info-label">Платформа:</span>
+                        <span class="info-value">{{ tg.platform }}</span>
+                    </div>
+                    <div class="info-item" v-if="tg && tg.version">
+                        <span class="info-label">Версия:</span>
+                        <span class="info-value">{{ tg.version }}</span>
                     </div>
                 </div>
             </div>
             <button @click="goToChannels" class="profile-button">Перейти к каналам</button>
         </div>
 
-        <div v-if="showChannelsBlock" class="channels">
-            <div v-for="channel in channels" 
-                 :key="channel.id" 
-                 class="channel" 
-                 @click="onImageClick(channel)">
-                <img :src="channel.logoLink" alt="channel-img" class="channel-img">
-                <div class="channel-name">{{ channel.name }}</div>
+        <div v-if="showChannelsBlock" class="channels-container">
+            <div class="channels">
+                <div v-for="channel in channels"
+                     :key="channel.id"
+                     class="channel"
+                     @click="onImageClick(channel)">
+                    <img :src="channel.logoLink" alt="channel-img" class="channel-img">
+                    <div class="channel-name">{{ channel.name }}</div>
+                </div>
             </div>
-            <br><br>
-            <button @click="close_webapp">Закрыть</button>
+            <div class="button-group">
+                <button @click="backToProfile" class="btn-secondary">Назад к профилю</button>
+                <button @click="close_webapp" class="btn-primary">Закрыть</button>
+            </div>
         </div>
         <br>
         
@@ -76,14 +95,51 @@
     </div>
 
     <script>
+        // Ждем полной загрузки Telegram WebApp перед инициализацией Vue
+        console.log('=== Скрипт загружен ===');
+        console.log('window.Telegram:', window.Telegram);
+        console.log('window.Telegram.WebApp:', window.Telegram?.WebApp);
+
+        // Функция для ожидания готовности Telegram WebApp
+        function waitForTelegramWebApp() {
+            return new Promise((resolve) => {
+                if (window.Telegram && window.Telegram.WebApp) {
+                    console.log('Telegram WebApp уже доступен');
+                    resolve(window.Telegram.WebApp);
+                } else {
+                    console.log('Ожидание загрузки Telegram WebApp...');
+                    let attempts = 0;
+                    const checkInterval = setInterval(() => {
+                        attempts++;
+                        if (window.Telegram && window.Telegram.WebApp) {
+                            console.log('Telegram WebApp загружен после', attempts, 'попыток');
+                            clearInterval(checkInterval);
+                            resolve(window.Telegram.WebApp);
+                        } else if (attempts > 50) { // Максимум 5 секунд ожидания
+                            console.warn('Timeout ожидания Telegram WebApp');
+                            clearInterval(checkInterval);
+                            resolve(null);
+                        }
+                    }, 100);
+                }
+            });
+        }
+
         var app = new Vue({
             el: '#app',
             data: {
                 showProfileBlock: true,
                 showChannelsBlock: false,
                 showPlayerBlock: false,
-                tg: window.Telegram.WebApp,
-                user: {},
+                tg: null,
+                user: {
+                    id: '',
+                    first_name: '',
+                    last_name: '',
+                    username: '',
+                    language_code: '',
+                    is_premium: false
+                },
                 userPhoto: null,
                 channels: [],
                 channel: null,
@@ -94,52 +150,184 @@
                 userInitials() {
                     const firstName = this.user.first_name || '';
                     const lastName = this.user.last_name || '';
-                    return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || '?';
+                    const initials = (firstName.charAt(0) + lastName.charAt(0)).toUpperCase();
+                    return initials || '?';
                 }
             },
-            mounted() {
-                if (this.tg.isExpanded == false) {
-                    this.tg.expand();
+            async created() {
+                // Ждем полной загрузки Telegram WebApp
+                console.log('=== Vue created ===');
+                this.tg = await waitForTelegramWebApp();
+
+                if (this.tg) {
+                    console.log('✅ Telegram WebApp инициализирован:', this.tg);
+                    console.log('Способ открытия (viewportStableHeight):', this.tg.viewportStableHeight);
+
+                    // Вызываем ready() сразу после инициализации
+                    this.tg.ready();
+                    console.log('✅ Telegram WebApp ready() вызван');
+                } else {
+                    console.error('❌ Не удалось инициализировать Telegram WebApp');
                 }
+            },
+            async mounted() {
+                console.log('=== Vue mounted ===');
+
+                // Даем дополнительное время для инициализации
+                await new Promise(resolve => setTimeout(resolve, 200));
+
+                // Разворачиваем приложение на весь экран
+                if (this.tg && !this.tg.isExpanded) {
+                    this.tg.expand();
+                    console.log('✅ Приложение развернуто');
+                }
+
+                // Загружаем данные пользователя
                 this.loadUserData();
+
+                // Загружаем каналы
                 this.fetchChannels();
+
+                // Добавляем повторную попытку загрузки данных через некоторое время
+                // Это помогает при открытии через inline кнопки
+                setTimeout(() => {
+                    console.log('=== Повторная проверка данных пользователя ===');
+                    if (!this.user.id || this.user.id === 'demo123') {
+                        console.log('Данные пользователя не загружены, пробуем еще раз...');
+                        this.loadUserData();
+                    } else {
+                        console.log('Данные пользователя уже загружены:', this.user.id);
+                    }
+                }, 1000);
+
+                // И еще одна попытка через 2 секунды
+                setTimeout(() => {
+                    console.log('=== Финальная проверка данных пользователя ===');
+                    if (!this.user.id || this.user.id === 'demo123') {
+                        console.log('Финальная попытка загрузки данных...');
+                        this.loadUserData();
+                    }
+                }, 2000);
             },
             methods: {
                 loadUserData() {
-                    // Получаем данные пользователя из Telegram WebApp
-                    const initData = this.tg.initDataUnsafe;
+                    console.log('=== Начало загрузки данных пользователя ===');
+                    console.log('Время:', new Date().toISOString());
 
-                    if (initData && initData.user) {
-                        this.user = {
-                            id: initData.user.id,
-                            first_name: initData.user.first_name,
-                            last_name: initData.user.last_name,
-                            username: initData.user.username,
-                            language_code: initData.user.language_code,
-                            is_premium: initData.user.is_premium || false
-                        };
-
-                        // Попытка получить фото профиля (если доступно через photo_url)
-                        if (initData.user.photo_url) {
-                            this.userPhoto = initData.user.photo_url;
-                        }
-                    } else {
-                        // Данные для тестирования вне Telegram
-                        this.user = {
-                            id: 'demo',
-                            first_name: 'Демо',
-                            last_name: 'Пользователь',
-                            username: 'demo_user',
-                            language_code: 'ru',
-                            is_premium: false
-                        };
+                    if (!this.tg) {
+                        console.error('Telegram WebApp не инициализирован');
+                        this.setDemoUser();
+                        return;
                     }
 
-                    console.log('User data loaded:', this.user);
+                    // Выводим всю информацию о Telegram WebApp для отладки
+                    console.log('Telegram WebApp объект:', this.tg);
+                    console.log('initDataUnsafe:', this.tg.initDataUnsafe);
+                    console.log('initData (raw):', this.tg.initData);
+                    console.log('isExpanded:', this.tg.isExpanded);
+                    console.log('colorScheme:', this.tg.colorScheme);
+                    console.log('platform:', this.tg.platform);
+                    console.log('version:', this.tg.version);
+
+                    const initData = this.tg.initDataUnsafe;
+
+                    // Проверяем наличие данных пользователя
+                    if (initData && Object.keys(initData).length > 0) {
+                        console.log('initDataUnsafe содержит данные:', Object.keys(initData));
+
+                        if (initData.user) {
+                            console.log('✅ Данные пользователя из Telegram найдены:', initData.user);
+
+                            this.user = {
+                                id: initData.user.id || '',
+                                first_name: initData.user.first_name || '',
+                                last_name: initData.user.last_name || '',
+                                username: initData.user.username || '',
+                                language_code: initData.user.language_code || '',
+                                is_premium: initData.user.is_premium || false
+                            };
+
+                            // Попытка получить фото профиля
+                            if (initData.user.photo_url) {
+                                this.userPhoto = initData.user.photo_url;
+                                console.log('✅ Фото профиля найдено:', this.userPhoto);
+                            } else {
+                                console.log('⚠️ Фото профиля не найдено, будут использованы инициалы');
+                            }
+
+                            console.log('✅ Данные успешно загружены:', this.user);
+
+                            // Показываем приветствие только если это НЕ демо-пользователь
+                            if (this.tg.showAlert && this.user.first_name && this.user.first_name !== 'Демо') {
+                                const userName = this.user.first_name + (this.user.last_name ? ' ' + this.user.last_name : '');
+                                this.tg.showAlert('Добро пожаловать, ' + userName + '!');
+                            }
+                        } else {
+                            console.warn('⚠️ initData есть, но user отсутствует');
+                            console.log('Содержимое initData:', JSON.stringify(initData));
+                            this.setDemoUser();
+                        }
+                    } else {
+                        console.warn('❌ initDataUnsafe пустой или undefined');
+                        console.log('Попытка парсинга initData напрямую...');
+
+                        // Попытка распарсить raw initData
+                        if (this.tg.initData) {
+                            try {
+                                const params = new URLSearchParams(this.tg.initData);
+                                const userParam = params.get('user');
+                                if (userParam) {
+                                    const userData = JSON.parse(decodeURIComponent(userParam));
+                                    console.log('✅ Данные пользователя получены через парсинг initData:', userData);
+
+                                    this.user = {
+                                        id: userData.id || '',
+                                        first_name: userData.first_name || '',
+                                        last_name: userData.last_name || '',
+                                        username: userData.username || '',
+                                        language_code: userData.language_code || '',
+                                        is_premium: userData.is_premium || false
+                                    };
+
+                                    if (userData.photo_url) {
+                                        this.userPhoto = userData.photo_url;
+                                    }
+
+                                    console.log('✅ Данные загружены через альтернативный метод:', this.user);
+                                    return;
+                                }
+                            } catch (e) {
+                                console.error('Ошибка парсинга initData:', e);
+                            }
+                        }
+
+                        console.warn('Используем демо-данные');
+                        this.setDemoUser();
+                    }
+
+                    console.log('=== Загрузка данных завершена ===');
+                },
+                setDemoUser() {
+                    console.log('Установка демо-пользователя');
+                    this.user = {
+                        id: 'demo123',
+                        first_name: 'Демо',
+                        last_name: 'Пользователь',
+                        username: 'demo_user',
+                        language_code: 'ru',
+                        is_premium: false
+                    };
                 },
                 goToChannels() {
+                    console.log('Переход к каналам');
                     this.showProfileBlock = false;
                     this.showChannelsBlock = true;
+                },
+                backToProfile() {
+                    console.log('Возврат к профилю');
+                    this.showChannelsBlock = false;
+                    this.showPlayerBlock = false;
+                    this.showProfileBlock = true;
                 },
                 async fetchChannels() {
                     try {
