@@ -11,6 +11,49 @@
 </head>
 <body>
     <div class="main" id="app">
+        <!-- Profile Block -->
+        <div v-if="showProfileBlock" class="profile-container">
+            <div class="profile-header">
+                <h1>Профиль пользователя</h1>
+            </div>
+            <div class="profile-card">
+                <div v-if="userPhoto" class="profile-photo">
+                    <img :src="userPhoto" alt="User Photo">
+                </div>
+                <div v-else class="profile-photo-placeholder">
+                    <div class="avatar-placeholder">{{ userInitials }}</div>
+                </div>
+
+                <div class="profile-info">
+                    <div class="info-item">
+                        <span class="info-label">Имя:</span>
+                        <span class="info-value">{{ user.first_name || 'Не указано' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Фамилия:</span>
+                        <span class="info-value">{{ user.last_name || 'Не указано' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Username:</span>
+                        <span class="info-value">{{ user.username ? '@' + user.username : 'Не указано' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">ID:</span>
+                        <span class="info-value">{{ user.id }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Язык:</span>
+                        <span class="info-value">{{ user.language_code || 'Не указано' }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-label">Premium:</span>
+                        <span class="info-value">{{ user.is_premium ? 'Да' : 'Нет' }}</span>
+                    </div>
+                </div>
+            </div>
+            <button @click="goToChannels" class="profile-button">Перейти к каналам</button>
+        </div>
+
         <div v-if="showChannelsBlock" class="channels">
             <div v-for="channel in channels" 
                  :key="channel.id" 
@@ -36,21 +79,68 @@
         var app = new Vue({
             el: '#app',
             data: {
-                showChannelsBlock: true,
+                showProfileBlock: true,
+                showChannelsBlock: false,
                 showPlayerBlock: false,
                 tg: window.Telegram.WebApp,
+                user: {},
+                userPhoto: null,
                 channels: [],
                 channel: null,
                 lock_img_src: 'lock-icon.png',
                 hls: null
             },
+            computed: {
+                userInitials() {
+                    const firstName = this.user.first_name || '';
+                    const lastName = this.user.last_name || '';
+                    return (firstName.charAt(0) + lastName.charAt(0)).toUpperCase() || '?';
+                }
+            },
             mounted() {
                 if (this.tg.isExpanded == false) {
                     this.tg.expand();
                 }
+                this.loadUserData();
                 this.fetchChannels();
             },
             methods: {
+                loadUserData() {
+                    // Получаем данные пользователя из Telegram WebApp
+                    const initData = this.tg.initDataUnsafe;
+
+                    if (initData && initData.user) {
+                        this.user = {
+                            id: initData.user.id,
+                            first_name: initData.user.first_name,
+                            last_name: initData.user.last_name,
+                            username: initData.user.username,
+                            language_code: initData.user.language_code,
+                            is_premium: initData.user.is_premium || false
+                        };
+
+                        // Попытка получить фото профиля (если доступно через photo_url)
+                        if (initData.user.photo_url) {
+                            this.userPhoto = initData.user.photo_url;
+                        }
+                    } else {
+                        // Данные для тестирования вне Telegram
+                        this.user = {
+                            id: 'demo',
+                            first_name: 'Демо',
+                            last_name: 'Пользователь',
+                            username: 'demo_user',
+                            language_code: 'ru',
+                            is_premium: false
+                        };
+                    }
+
+                    console.log('User data loaded:', this.user);
+                },
+                goToChannels() {
+                    this.showProfileBlock = false;
+                    this.showChannelsBlock = true;
+                },
                 async fetchChannels() {
                     try {
                         const response = await fetch('http://64.227.72.36:8083/api/v1/playlist/page?page=1&perpage=10');
