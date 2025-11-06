@@ -210,9 +210,61 @@
                 }, 2000);
             },
             methods: {
+                // Новый метод для парсинга URL параметров
+                loadUserDataFromURL() {
+                    console.log('=== Попытка загрузки данных из URL параметров ===');
+
+                    try {
+                        const urlParams = new URLSearchParams(window.location.search);
+
+                        // Проверяем наличие параметра user_id
+                        const userId = urlParams.get('user_id');
+
+                        if (userId) {
+                            console.log('✅ Найдены данные пользователя в URL');
+
+                            this.user = {
+                                id: userId,
+                                first_name: urlParams.get('first_name') || '',
+                                last_name: urlParams.get('last_name') || '',
+                                username: urlParams.get('username') || '',
+                                language_code: urlParams.get('language_code') || 'ru',
+                                is_premium: urlParams.get('is_premium') === 'true' || false
+                            };
+
+                            // Проверяем фото профиля
+                            const photoUrl = urlParams.get('photo_url');
+                            if (photoUrl && photoUrl !== 'null' && photoUrl !== 'undefined') {
+                                this.userPhoto = decodeURIComponent(photoUrl);
+                            }
+
+                            console.log('✅ Данные пользователя загружены из URL:', this.user);
+                            return true;
+                        } else {
+                            console.log('⚠️ Параметры пользователя не найдены в URL');
+                            return false;
+                        }
+                    } catch (error) {
+                        console.error('❌ Ошибка при парсинге URL параметров:', error);
+                        return false;
+                    }
+                },
+
                 loadUserData() {
                     console.log('=== Начало загрузки данных пользователя ===');
                     console.log('Время:', new Date().toISOString());
+
+                    // ПРИОРИТЕТ 1: Попытка загрузки из URL параметров
+                    if (this.loadUserDataFromURL()) {
+                        console.log('✅ Данные успешно загружены из URL параметров');
+
+                        // Показываем приветствие
+                        if (this.tg && this.tg.showAlert && this.user.first_name && this.user.first_name !== 'Демо') {
+                            const userName = this.user.first_name + (this.user.last_name ? ' ' + this.user.last_name : '');
+                            this.tg.showAlert('Добро пожаловать, ' + userName + '!');
+                        }
+                        return;
+                    }
 
                     if (!this.tg) {
                         console.error('Telegram WebApp не инициализирован');
