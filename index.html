@@ -6,132 +6,136 @@
 <title>Huawei SMC + RSE8800A — API Reference</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Titillium Web',sans-serif;background:#fafafa;color:#3b4151;font-size:14px;line-height:1.5}
-a{color:#61affe;text-decoration:none}
+body{font-family:'Titillium Web',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#fafafa;color:#3b4151;font-size:14px;line-height:1.5}
+code{font-family:'Source Code Pro','SFMono-Regular',monospace;font-size:12px;background:#f4f4f4;padding:2px 5px;border-radius:3px;color:#e74c3c}
 
-.topbar{background:#1b1b1b;padding:8px 16px;display:flex;align-items:center;gap:12px}
-.topbar-logo{font-size:20px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
-.topbar-logo svg{width:32px;height:32px}
+.topbar{background:#1b1b1b;padding:8px 20px;display:flex;align-items:center;gap:10px}
+.topbar-logo{font-size:18px;font-weight:700;color:#fff;display:flex;align-items:center;gap:8px}
+.topbar-logo-circle{width:30px;height:30px;border-radius:50%;background:#89bf04;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-size:15px}
 
 .info-wrap{padding:20px 30px 0}
-.info-title{font-size:32px;font-weight:700;margin-bottom:4px}
-.info-title .version{font-size:14px;font-weight:700;background:#89bf04;color:#fff;padding:3px 8px;border-radius:4px;margin-left:8px;vertical-align:middle}
+.info-title{font-size:32px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:10px}
+.version-badge{font-size:12px;font-weight:700;background:#89bf04;color:#fff;padding:3px 8px;border-radius:4px}
 .info-base{font-size:12px;color:#999;margin-bottom:4px}
 .info-link{font-size:12px;color:#61affe;margin-bottom:8px;display:block}
-.info-desc{font-size:14px;color:#3b4151;margin-bottom:16px}
+.info-desc{font-size:14px;color:#555}
 
-.schemes-row{padding:8px 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e8e8e8}
-.schemes-label{font-size:12px;font-weight:700;color:#3b4151;margin-right:8px}
-.schemes-select{border:2px solid #41444e;border-radius:4px;padding:4px 8px;font-size:13px;color:#3b4151;background:#fff;cursor:pointer}
-.authorize-btn{border:2px solid #49cc90;background:rgba(73,204,144,.1);color:#3b4151;padding:6px 16px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px}
-.authorize-btn:hover{background:rgba(73,204,144,.2)}
-.lock-icon{font-size:16px}
+.schemes-row{padding:10px 30px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e8e8e8;margin-top:16px}
+.schemes-label{font-size:12px;font-weight:700;margin-right:8px}
+.schemes-select{border:2px solid #41444e;border-radius:4px;padding:4px 8px;font-size:13px;background:#fff;cursor:pointer}
+.auth-btn{border:2px solid #49cc90;background:rgba(73,204,144,.1);color:#3b4151;padding:6px 16px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px}
+.auth-btn:hover{background:rgba(73,204,144,.2)}
 
 .main{padding:0 30px 60px}
 
-.tag-block{margin-bottom:0;border:1px solid rgba(59,65,81,.3);border-radius:4px;margin-top:16px;overflow:hidden}
-.tag-header{padding:10px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:rgba(0,0,0,.07);user-select:none}
+/* TAG BLOCK */
+.tag-block{margin-top:16px;border:1px solid rgba(59,65,81,.3);border-radius:4px;overflow:hidden}
+.tag-header{padding:10px 20px;display:flex;align-items:center;cursor:pointer;background:rgba(0,0,0,.07);user-select:none;gap:10px}
 .tag-header:hover{background:rgba(0,0,0,.1)}
-.tag-title{font-size:18px;font-weight:700;color:#3b4151}
-.tag-desc-text{font-size:13px;color:#666;margin-left:10px;font-weight:400}
-.tag-chevron{font-size:20px;color:#3b4151;transition:transform .2s}
-.tag-chevron.closed{transform:rotate(-90deg)}
+.tag-title{font-size:18px;font-weight:700}
+.tag-subdesc{font-size:13px;color:#666;font-weight:400;flex:1}
+.tag-arrow{font-size:18px;color:#555;transition:transform .2s}
+.tag-arrow.closed{transform:rotate(-90deg)}
 
-.ep-wrap{border-top:1px solid rgba(59,65,81,.3)}
-.ep-row{display:flex;align-items:center;padding:0;cursor:pointer;border-bottom:1px solid rgba(59,65,81,.1)}
-.ep-row:last-child{border-bottom:none}
-.ep-row:hover .ep-summary-bar{opacity:0.85}
-.ep-summary-bar{display:flex;align-items:center;width:100%;padding:8px 16px;gap:10px}
-.method-tag{font-size:14px;font-weight:700;padding:6px 0;min-width:80px;text-align:center;border-radius:3px;flex-shrink:0}
-.t-post{background:#49cc90;color:#fff}
-.t-get{background:#61affe;color:#fff}
-.t-delete{background:#f93e3e;color:#fff}
-.t-patch{background:#50e3c2;color:#fff}
-.t-ws{background:#9012fe;color:#fff}
-.ep-path{font-size:16px;font-weight:700;font-family:'Source Code Pro',monospace;color:#3b4151;flex:1}
-.ep-op-summary{font-size:13px;color:#3b4151;flex:1}
-.new-tag{font-size:11px;font-weight:700;background:#ff6b35;color:#fff;padding:2px 7px;border-radius:3px;flex-shrink:0}
-.ep-lock{font-size:14px;color:#aaa;flex-shrink:0}
-.ep-chevron-sm{font-size:12px;color:#aaa;flex-shrink:0;transition:transform .2s}
-.ep-chevron-sm.open{transform:rotate(180deg)}
+/* ENDPOINT ROW — full width, detail below */
+.ep-block{border-top:1px solid rgba(59,65,81,.15)}
+.ep-block:first-child{border-top:none}
 
-/* colored left border by method */
-.ep-row.row-post .ep-summary-bar{border-left:4px solid #49cc90}
-.ep-row.row-get .ep-summary-bar{border-left:4px solid #61affe}
-.ep-row.row-delete .ep-summary-bar{border-left:4px solid #f93e3e}
-.ep-row.row-patch .ep-summary-bar{border-left:4px solid #50e3c2}
-.ep-row.row-ws .ep-summary-bar{border-left:4px solid #9012fe}
+.ep-summary{display:flex;align-items:center;gap:10px;padding:8px 20px;cursor:pointer;user-select:none;background:#fff;width:100%}
+.ep-summary:hover{filter:brightness(0.97)}
 
-.ep-row.row-post.open .ep-summary-bar{background:rgba(73,204,144,.1);border-color:#49cc90}
-.ep-row.row-get.open .ep-summary-bar{background:rgba(97,175,254,.1);border-color:#61affe}
-.ep-row.row-delete.open .ep-summary-bar{background:rgba(249,62,62,.1);border-color:#f93e3e}
-.ep-row.row-patch.open .ep-summary-bar{background:rgba(80,227,194,.1);border-color:#50e3c2}
-.ep-row.row-ws.open .ep-summary-bar{background:rgba(144,18,254,.1);border-color:#9012fe}
+/* left border per method */
+.ep-summary.m-post{border-left:5px solid #49cc90;background:rgba(73,204,144,.07)}
+.ep-summary.m-get{border-left:5px solid #61affe;background:rgba(97,175,254,.07)}
+.ep-summary.m-delete{border-left:5px solid #f93e3e;background:rgba(249,62,62,.07)}
+.ep-summary.m-patch{border-left:5px solid #50e3c2;background:rgba(80,227,194,.07)}
+.ep-summary.m-ws{border-left:5px solid #9012fe;background:rgba(144,18,254,.07)}
 
-.ep-detail{display:none;padding:20px 20px 20px 24px;background:#fff;border-top:1px solid rgba(59,65,81,.2)}
+.ep-summary.open.m-post{background:rgba(73,204,144,.15)}
+.ep-summary.open.m-get{background:rgba(97,175,254,.15)}
+.ep-summary.open.m-delete{background:rgba(249,62,62,.15)}
+.ep-summary.open.m-patch{background:rgba(80,227,194,.15)}
+.ep-summary.open.m-ws{background:rgba(144,18,254,.15)}
+
+.method-pill{font-size:13px;font-weight:700;padding:5px 0;min-width:80px;text-align:center;border-radius:3px;flex-shrink:0;color:#fff}
+.pill-post{background:#49cc90}
+.pill-get{background:#61affe}
+.pill-delete{background:#f93e3e}
+.pill-patch{background:#50e3c2}
+.pill-ws{background:#9012fe}
+
+.ep-path-text{font-size:16px;font-weight:700;font-family:'Source Code Pro',monospace;flex:1}
+.new-pill{font-size:10px;font-weight:700;background:#ff6b35;color:#fff;padding:2px 7px;border-radius:3px;flex-shrink:0}
+.ep-op-text{font-size:13px;color:#3b4151;flex:2}
+.ep-lock{font-size:13px;color:#bbb;flex-shrink:0}
+.ep-arrow{font-size:11px;color:#aaa;flex-shrink:0;transition:transform .2s}
+.ep-arrow.open{transform:rotate(180deg)}
+
+/* DETAIL — full width below the row */
+.ep-detail{display:none;padding:20px 24px 24px;background:#fff;border-top:1px solid #e8e8e8;width:100%}
 .ep-detail.open{display:block}
 
-.detail-section{margin-bottom:20px}
-.detail-section-title{font-size:14px;font-weight:700;color:#3b4151;margin-bottom:10px;padding-bottom:4px;border-bottom:1px solid #e8e8e8}
-
 .info-note{font-size:13px;padding:10px 14px;background:#e8f4fd;color:#0c4a6e;border-radius:4px;margin-bottom:14px;border-left:4px solid #61affe;line-height:1.6}
-.desc-text{font-size:14px;color:#3b4151;margin-bottom:14px;line-height:1.7}
-code{font-family:'Source Code Pro',monospace;font-size:12px;background:#f4f4f4;padding:2px 5px;border-radius:3px;color:#e74c3c}
+.desc-p{font-size:14px;color:#3b4151;margin-bottom:16px;line-height:1.7}
 
-.params-table{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:10px}
-.params-table th{text-align:left;padding:8px 12px;background:#f7f7f7;border:1px solid #e8e8e8;font-weight:700;font-size:12px;color:#3b4151}
-.params-table td{padding:8px 12px;border:1px solid #e8e8e8;vertical-align:top;color:#3b4151}
-.req-star{color:#f93e3e;font-weight:700}
-.type-str{color:#3b4151;font-style:italic;font-size:12px}
+.section-title{font-size:14px;font-weight:700;color:#3b4151;margin:0 0 10px;padding-bottom:6px;border-bottom:1px solid #eee}
 
-.model-schema{background:#f7f7f7;border:1px solid #e8e8e8;border-radius:4px;padding:12px 14px;font-family:'Source Code Pro',monospace;font-size:12px;color:#3b4151;line-height:1.8;white-space:pre;overflow-x:auto;margin-bottom:10px}
+.params-tbl{width:100%;border-collapse:collapse;font-size:13px;margin-bottom:16px}
+.params-tbl th{text-align:left;padding:7px 12px;background:#f7f7f7;border:1px solid #e2e2e2;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#555}
+.params-tbl td{padding:8px 12px;border:1px solid #e2e2e2;vertical-align:top}
+.req-mark{color:#f93e3e;font-weight:700}
+.type-label{font-style:italic;font-size:12px;color:#777}
 
-.resp-list{margin-bottom:10px}
-.resp-item{border:1px solid #e8e8e8;border-radius:4px;margin-bottom:6px;overflow:hidden}
+.schema-box{background:#f7f7f7;border:1px solid #e2e2e2;border-radius:4px;padding:12px 14px;font-family:'Source Code Pro',monospace;font-size:12px;line-height:1.8;white-space:pre;overflow-x:auto;margin-bottom:16px}
+
+.resp-accordion{margin-bottom:6px;border:1px solid #e2e2e2;border-radius:4px;overflow:hidden}
 .resp-head{display:flex;align-items:center;gap:10px;padding:8px 12px;background:#f7f7f7;cursor:pointer}
 .resp-head:hover{background:#efefef}
-.resp-code-badge{font-size:12px;font-weight:700;padding:3px 8px;border-radius:3px}
-.r200{background:#d4edda;color:#155724}
-.r204{background:#d4edda;color:#155724}
+.r-badge{font-size:11px;font-weight:700;padding:3px 9px;border-radius:3px}
+.r200,.r204{background:#d4edda;color:#155724}
 .r400{background:#fff3cd;color:#856404}
-.r401{background:#f8d7da;color:#721c24}
-.r404{background:#f8d7da;color:#721c24}
-.resp-desc{font-size:13px;color:#555;flex:1}
-.resp-body{padding:10px 12px;background:#fff;display:none}
-.resp-body.open{display:block}
+.r401,.r404{background:#f8d7da;color:#721c24}
+.resp-label{font-size:13px;color:#555;flex:1}
+.resp-body-box{display:none;padding:10px 12px;background:#fff}
+.resp-body-box.open{display:block}
 
-.try-section{margin-top:16px;padding:14px;background:#f9f9f9;border:1px solid #e8e8e8;border-radius:4px}
-.try-title{font-size:13px;font-weight:700;color:#3b4151;margin-bottom:10px}
-.try-params{margin-bottom:12px}
-.try-param-row{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-.try-param-label{font-size:12px;color:#3b4151;min-width:120px;font-weight:600}
-.try-input{border:1px solid #d0d0d0;border-radius:4px;padding:6px 10px;font-size:13px;color:#3b4151;background:#fff;flex:1;font-family:inherit}
+/* TRY IT */
+.try-box{margin-top:20px;padding:16px;background:#f9f9f9;border:1px solid #e2e2e2;border-radius:4px}
+.try-box-title{font-size:14px;font-weight:700;margin-bottom:12px;color:#3b4151}
+.try-field-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.try-field-name{font-size:13px;font-weight:600;min-width:130px;color:#3b4151}
+.try-input{border:1px solid #ccc;border-radius:4px;padding:6px 10px;font-size:13px;flex:1;font-family:inherit;background:#fff;color:#3b4151}
 .try-input:focus{outline:none;border-color:#61affe;box-shadow:0 0 0 2px rgba(97,175,254,.2)}
-.try-textarea{border:1px solid #d0d0d0;border-radius:4px;padding:8px 10px;font-size:12px;color:#3b4151;background:#fff;width:100%;height:120px;font-family:'Source Code Pro',monospace;resize:vertical;margin-bottom:10px}
+.try-textarea{width:100%;height:110px;border:1px solid #ccc;border-radius:4px;padding:8px 10px;font-size:12px;font-family:'Source Code Pro',monospace;resize:vertical;margin-bottom:12px;background:#fff;color:#3b4151}
 .try-textarea:focus{outline:none;border-color:#61affe}
-.try-btn{background:#4990e2;color:#fff;border:none;padding:8px 20px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
-.try-btn:hover{background:#357abd}
-.try-btn:active{transform:scale(0.98)}
-.try-result{margin-top:12px;display:none}
+.execute-btn{background:#4990e2;color:#fff;border:none;padding:8px 22px;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}
+.execute-btn:hover{background:#357abd}
+.execute-btn:active{transform:scale(.98)}
+.clear-btn{background:transparent;color:#555;border:1px solid #ccc;padding:8px 18px;border-radius:4px;font-size:14px;cursor:pointer;font-family:inherit;margin-left:8px}
+.clear-btn:hover{background:#f0f0f0}
+
+.try-result{display:none;margin-top:16px}
 .try-result.show{display:block}
-.try-result-label{font-size:12px;font-weight:700;color:#3b4151;margin-bottom:4px}
-.try-curl{background:#41444e;color:#fff;border-radius:4px;padding:10px 12px;font-family:'Source Code Pro',monospace;font-size:11px;white-space:pre-wrap;margin-bottom:10px;word-break:break-all}
-.try-response-code{font-size:13px;font-weight:700;margin-bottom:6px}
-.code-green{color:#49cc90}
-.try-response-body{background:#f7f7f7;border:1px solid #e8e8e8;border-radius:4px;padding:10px 12px;font-family:'Source Code Pro',monospace;font-size:12px;color:#3b4151;white-space:pre;overflow-x:auto;max-height:300px;overflow-y:auto}
+.result-label{font-size:12px;font-weight:700;color:#555;margin:10px 0 4px;text-transform:uppercase;letter-spacing:.4px}
+.curl-box{background:#41444e;color:#e8e8e8;border-radius:4px;padding:12px 14px;font-family:'Source Code Pro',monospace;font-size:11px;white-space:pre-wrap;word-break:break-all;margin-bottom:4px}
+.resp-code-text{font-size:14px;font-weight:700;color:#49cc90;margin-bottom:6px}
+.resp-body-result{background:#f7f7f7;border:1px solid #e2e2e2;border-radius:4px;padding:12px 14px;font-family:'Source Code Pro',monospace;font-size:12px;white-space:pre;overflow-x:auto;max-height:320px;overflow-y:auto;line-height:1.7}
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="topbar-logo">
-    <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="16" fill="#89bf04"/><text x="16" y="21" text-anchor="middle" font-size="14" font-weight="900" fill="white" font-family="Arial">S</text></svg>
+    <div class="topbar-logo-circle">S</div>
     Swagger
   </div>
 </div>
 
 <div class="info-wrap">
-  <div class="info-title">Huawei SMC + RSE8800A API <span class="version">1.0</span></div>
+  <div class="info-title">
+    Huawei SMC + RSE8800A API
+    <span class="version-badge">1.0</span>
+  </div>
   <div class="info-base">[ Base URL: https://smc.sud.uz ]</div>
   <a class="info-link" href="#">/swagger/huawei-smc/swagger.json</a>
   <div class="info-desc">Conference management · Live streaming · Recording · Web join (WebRTC)</div>
@@ -142,370 +146,411 @@ code{font-family:'Source Code Pro',monospace;font-size:12px;background:#f4f4f4;p
     <span class="schemes-label">Schemes</span>
     <select class="schemes-select"><option>HTTPS</option><option>HTTP</option></select>
   </div>
-  <button class="authorize-btn"><span class="lock-icon">🔓</span> Authorize</button>
+  <button class="auth-btn">🔓 Authorize</button>
 </div>
 
 <div class="main" id="main"></div>
 
 <script>
-var ENDPOINTS = [
+var pillClass = {POST:'pill-post',GET:'pill-get',DELETE:'pill-delete',PATCH:'pill-patch',WS:'pill-ws'};
+var sumClass  = {POST:'m-post', GET:'m-get',  DELETE:'m-delete',  PATCH:'m-patch',  WS:'m-ws'};
+var rcClass   = {'200':'r200','204':'r204','400':'r400','401':'r401','404':'r404'};
+
+var DEFS = [
   {
-    tag:"authentication",
-    tagDesc:"Единый вход, JWT токен",
-    endpoints:[
-      {
-        method:"POST", path:"/login", summary:"Единый вход для SMC и RSE", isNew:true, locked:false,
-        desc:"Единая точка входа. Заменяет GET /conf-portal/tokens и GET /sys-portal/tokens. Возвращает JWT токен, который используется для всех запросов к SMC и RSE. Токен не инвалидируется при входе с другого устройства.",
-        info:"Новый API. Все последующие запросы передают токен через заголовок Authorization: Bearer {token}.",
-        params:[],
-        bodySchema:'{\n  "login": "api_operator",\n  "password": "your_password"\n}',
-        responses:[
-          {code:"200",desc:"Успешная аутентификация",schema:'{\n  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkNGU4YTEyMyIsInVzZXJUeXBlIjoib3BlcmF0b3IiLCJleHAiOjE3MzA5OTk2MDB9.abc123",\n  "userId": "d4e8a123-4b5c-6d7e-8f9a-0b1c2d3e4f5a",\n  "userType": "operator",\n  "expiresAt": "2024-11-09T10:00:00Z"\n}'},
-          {code:"401",desc:"Неверный логин или пароль",schema:'{\n  "code": 401,\n  "message": "Invalid credentials"\n}'}
-        ],
-        tryParams:[{name:"login",placeholder:"api_operator"},{name:"password",placeholder:"your_password"}],
-        mockResponse:'{\n  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkNGU4YTEyMyIsInVzZXJUeXBlIjoib3BlcmF0b3IiLCJleHAiOjE3MzA5OTk2MDB9.mock_signature_abc123",\n  "userId": "d4e8a123-4b5c-6d7e-8f9a-0b1c2d3e4f5a",\n  "userType": "operator",\n  "expiresAt": "2024-11-09T10:00:00Z"\n}'
-      }
-    ]
+    tag:'authentication', tagDesc:'Единый вход, JWT токен',
+    eps:[{
+      method:'POST', path:'/login', summary:'Единый вход для SMC и RSE', isNew:true, locked:false,
+      info:'Новый API. Все последующие запросы передают токен через заголовок Authorization: Bearer {token}.',
+      desc:'Единая точка входа. Заменяет GET /conf-portal/tokens и GET /sys-portal/tokens. Возвращает JWT токен, который используется для всех запросов к SMC и RSE. Токен не инвалидируется при входе с другого устройства.',
+      params:[],
+      bodySchema:'{\n  "login": "api_operator",\n  "password": "your_password"\n}',
+      responses:[
+        {code:'200',desc:'Успешная аутентификация',schema:'{\n  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkNGU4YTEyMyIsInVzZXJUeXBlIjoib3BlcmF0b3IiLCJleHAiOjE3MzA5OTk2MDB9.mock",\n  "userId": "d4e8a123-4b5c-6d7e-8f9a-0b1c2d3e4f5a",\n  "userType": "operator",\n  "expiresAt": "2024-11-09T10:00:00Z"\n}'},
+        {code:'401',desc:'Неверный логин или пароль',schema:'{\n  "code": 401,\n  "message": "Invalid credentials"\n}'}
+      ],
+      tryFields:[{name:'login',ph:'api_operator'},{name:'password',ph:'your_password'}],
+      mock:'{\n  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJkNGU4YTEyMyIsInVzZXJUeXBlIjoib3BlcmF0b3IifQ.mock_sig",\n  "userId": "d4e8a123-4b5c-6d7e-8f9a-0b1c2d3e4f5a",\n  "userType": "operator",\n  "expiresAt": "2024-11-09T10:00:00Z"\n}'
+    }]
   },
   {
-    tag:"conference",
-    tagDesc:"Создание, управление, участники",
-    endpoints:[
+    tag:'conference', tagDesc:'Создание, управление, участники',
+    eps:[
       {
-        method:"POST", path:"/conf-portal/conferences", summary:"Создать конференцию", isNew:false, locked:true,
-        desc:"Создаёт конференцию в SMC. При enableLiveBroadcast: true в ответе возвращается liveAddress. Поля guestPassword и chairmanPassword возвращаются в ответе — необходимо сохранить для веб-подключения участников.",
+        method:'POST', path:'/conf-portal/conferences', summary:'Создать конференцию', isNew:false, locked:true,
         info:null,
+        desc:'Создаёт конференцию в SMC. При enableLiveBroadcast: true возвращает liveAddress. Поля guestPassword и chairmanPassword возвращаются в ответе — необходимо сохранить для веб-подключения.',
         params:[],
         bodySchema:'{\n  "conference": {\n    "subject": "Судебное заседание №2024-1234",\n    "chairmanPassword": "123456",\n    "guestPassword": "654321",\n    "conferenceTimeType": "INSTANT_CONFERENCE",\n    "scheduleStartTime": "2024-11-08T10:00:00Z",\n    "duration": 120\n  },\n  "streamService": {\n    "supportLive": true,\n    "supportRecord": true,\n    "autoRecord": true\n  },\n  "multiConferenceService": {\n    "conferenceCapabilitySetting": {\n      "type": "AVC",\n      "rate": 1920,\n      "enableLiveBroadcast": true,\n      "autoRecord": true\n    },\n    "conferencePolicySetting": {\n      "autoMute": true,\n      "autoExtend": true,\n      "maxParticipantNum": 500\n    }\n  }\n}',
         responses:[
-          {code:"200",desc:"Конференция создана",schema:'{\n  "conference": {\n    "id": "3c33b694-ee6a-4034-8715-2746d818b352",\n    "subject": "Судебное заседание №2024-1234",\n    "chairmanPassword": "123456",\n    "guestPassword": "654321",\n    "active": true\n  },\n  "streamService": {\n    "supportLive": true,\n    "liveAddress": "https://rse1.sud.uz/live/3c33b694-.../stream.m3u8"\n  }\n}'},
-          {code:"400",desc:"Неверные параметры запроса",schema:'{\n  "code": 400,\n  "message": "Bad Request"\n}'}
+          {code:'200',desc:'Конференция создана',schema:'{\n  "conference": {\n    "id": "3c33b694-ee6a-4034-8715-2746d818b352",\n    "subject": "Судебное заседание №2024-1234",\n    "chairmanPassword": "123456",\n    "guestPassword": "654321",\n    "active": true\n  },\n  "streamService": {\n    "supportLive": true,\n    "liveAddress": "https://rse1.sud.uz/live/3c33b694-.../stream.m3u8"\n  }\n}'},
+          {code:'400',desc:'Неверные параметры',schema:'{\n  "code": 400,\n  "message": "Bad Request"\n}'}
         ],
-        tryParams:[{name:"subject",placeholder:"Судебное заседание №2024-1234"},{name:"guestPassword",placeholder:"654321"},{name:"chairmanPassword",placeholder:"123456"}],
-        mockResponse:'{\n  "conference": {\n    "id": "3c33b694-ee6a-4034-8715-2746d818b352",\n    "subject": "Судебное заседание №2024-1234",\n    "chairmanPassword": "123456",\n    "guestPassword": "654321",\n    "active": true,\n    "scheduleStartTime": "2024-11-08T10:00:00Z"\n  },\n  "streamService": {\n    "supportLive": true,\n    "liveAddress": "https://rse1.sud.uz/live/3c33b694-ee6a-4034-8715-2746d818b352/stream.m3u8"\n  }\n}'
+        tryFields:[{name:'subject',ph:'Судебное заседание №2024-1234'},{name:'guestPassword',ph:'654321'},{name:'chairmanPassword',ph:'123456'}],
+        mock:'{\n  "conference": {\n    "id": "3c33b694-ee6a-4034-8715-2746d818b352",\n    "subject": "Судебное заседание №2024-1234",\n    "chairmanPassword": "123456",\n    "guestPassword": "654321",\n    "active": true\n  },\n  "streamService": {\n    "supportLive": true,\n    "liveAddress": "https://rse1.sud.uz/live/3c33b694-ee6a-4034-8715-2746d818b352/stream.m3u8"\n  }\n}'
       },
       {
-        method:"GET", path:"/online/conferences/{conferenceId}/detail", summary:"Детали активной конференции", isNew:false, locked:true,
-        desc:"Возвращает текущее состояние активной конференции: статус записи, трансляции, количество участников онлайн.",
+        method:'GET', path:'/online/conferences/{conferenceId}/detail', summary:'Детали активной конференции', isNew:false, locked:true,
         info:null,
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID конференции в SMC"}],
+        desc:'Возвращает текущее состояние активной конференции: статус записи, трансляции, количество участников онлайн.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID конференции в SMC'}],
         bodySchema:null,
         responses:[
-          {code:"200",desc:"Детали конференции",schema:'{\n  "conferenceUiParam": {\n    "id": "3c33b694-ee6a-4034-8715-2746d818b352",\n    "subject": "Судебное заседание №2024-1234",\n    "onlineParticipantNum": 3,\n    "totalParticipantNum": 5\n  },\n  "conferenceState": {\n    "recording": true,\n    "living": true,\n    "isMute": false,\n    "lock": false\n  }\n}'},
-          {code:"404",desc:"Конференция не найдена",schema:'{\n  "code": 404,\n  "message": "Conference not found"\n}'}
+          {code:'200',desc:'Детали конференции',schema:'{\n  "conferenceUiParam": {\n    "id": "3c33b694-ee6a-4034-8715-2746d818b352",\n    "subject": "Судебное заседание №2024-1234",\n    "onlineParticipantNum": 3,\n    "totalParticipantNum": 5\n  },\n  "conferenceState": {\n    "recording": true,\n    "living": true,\n    "isMute": false,\n    "lock": false\n  }\n}'},
+          {code:'404',desc:'Конференция не найдена',schema:'{\n  "code": 404,\n  "message": "Conference not found"\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"}],
-        mockResponse:'{\n  "conferenceUiParam": {\n    "id": "3c33b694-ee6a-4034-8715-2746d818b352",\n    "subject": "Судебное заседание №2024-1234",\n    "onlineParticipantNum": 3,\n    "totalParticipantNum": 5,\n    "duration": 120\n  },\n  "conferenceState": {\n    "recording": true,\n    "living": true,\n    "isMute": false,\n    "lock": false\n  }\n}'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'}],
+        mock:'{\n  "conferenceUiParam": {\n    "id": "3c33b694-ee6a-4034-8715-2746d818b352",\n    "subject": "Судебное заседание №2024-1234",\n    "onlineParticipantNum": 3,\n    "totalParticipantNum": 5,\n    "duration": 120\n  },\n  "conferenceState": {\n    "recording": true,\n    "living": true,\n    "isMute": false,\n    "lock": false\n  }\n}'
       },
       {
-        method:"POST", path:"/online/conferences/{conferenceId}/participants", summary:"Добавить терминал (переговорную комнату)", isNew:false, locked:true,
-        desc:"Добавляет физический терминал к активной конференции. SMC автоматически звонит на указанный URI терминала.",
+        method:'POST', path:'/online/conferences/{conferenceId}/participants', summary:'Добавить терминал', isNew:false, locked:true,
         info:null,
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID активной конференции"}],
+        desc:'Добавляет физический терминал к активной конференции. SMC автоматически звонит на указанный URI терминала.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID активной конференции'}],
         bodySchema:'[\n  {\n    "entryUuid": "76ecd26d-897e-4637-8b49-99ec59a25064",\n    "name": "Зал №3 — Суд Ташкента",\n    "uri": "9482634001",\n    "terminalType": "TE",\n    "rate": "1920",\n    "participantSourceType": "NORMAL"\n  }\n]',
         responses:[
-          {code:"200",desc:"Участник добавлен",schema:'{\n  "resultCode": 0,\n  "message": "success"\n}'},
-          {code:"404",desc:"Конференция не найдена",schema:'{\n  "code": 404,\n  "message": "Conference not found"\n}'}
+          {code:'200',desc:'Участник добавлен',schema:'{\n  "resultCode": 0,\n  "message": "success"\n}'},
+          {code:'404',desc:'Конференция не найдена',schema:'{\n  "code": 404,\n  "message": "Conference not found"\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"}],
-        mockResponse:'{\n  "resultCode": 0,\n  "message": "success"\n}'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'}],
+        mock:'{\n  "resultCode": 0,\n  "message": "success"\n}'
       },
       {
-        method:"POST", path:"/online/conferences/{conferenceId}/attendees", summary:"Добавить слушателя из адресной книги", isNew:false, locked:true,
-        desc:"Добавляет слушателя (пользователя из адресной книги SMC) к активной конференции.",
+        method:'POST', path:'/online/conferences/{conferenceId}/attendees', summary:'Добавить слушателя из адресной книги', isNew:false, locked:true,
         info:null,
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID активной конференции"}],
+        desc:'Добавляет слушателя (пользователя из адресной книги SMC) к активной конференции.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID активной конференции'}],
         bodySchema:'[\n  {\n    "name": "Иванов Иван",\n    "account": "ivanov@sud.uz",\n    "uri": "sip:ivanov@smc.sud.uz",\n    "organizationName": "Суд Ташкентской области",\n    "rate": 1920\n  }\n]',
         responses:[
-          {code:"200",desc:"Слушатель добавлен",schema:'{\n  "resultCode": 0,\n  "message": "success"\n}'},
-          {code:"400",desc:"Неверные параметры",schema:'{\n  "code": 400,\n  "message": "Bad Request"\n}'}
+          {code:'200',desc:'Слушатель добавлен',schema:'{\n  "resultCode": 0,\n  "message": "success"\n}'},
+          {code:'400',desc:'Неверные параметры',schema:'{\n  "code": 400,\n  "message": "Bad Request"\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"}],
-        mockResponse:'{\n  "resultCode": 0,\n  "message": "success"\n}'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'}],
+        mock:'{\n  "resultCode": 0,\n  "message": "success"\n}'
       },
       {
-        method:"GET", path:"/online/conferences/{conferenceId}/participants", summary:"Список участников и их статус", isNew:false, locked:true,
-        desc:"Возвращает всех участников активной конференции с текущим статусом подключения.",
+        method:'GET', path:'/online/conferences/{conferenceId}/participants', summary:'Список участников и их статус', isNew:false, locked:true,
         info:null,
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID активной конференции"}],
+        desc:'Возвращает всех участников активной конференции с текущим статусом подключения.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID активной конференции'}],
         bodySchema:null,
         responses:[
-          {code:"200",desc:"Список участников",schema:'{\n  "participants": [\n    {\n      "id": "709a83c0-8ec6-4dca-8146-58277a1d3557",\n      "name": "Зал №3 — Суд Ташкента",\n      "uri": "9482634001",\n      "state": "ONLINE",\n      "audio": true,\n      "video": true\n    },\n    {\n      "id": "b9a44039-11ab-423f-99f6-c9f6aa744b34",\n      "name": "Иванов Иван",\n      "uri": "sip:ivanov@smc.sud.uz",\n      "state": "CALLING",\n      "audio": true,\n      "video": false\n    }\n  ]\n}'}
+          {code:'200',desc:'Список участников',schema:'{\n  "participants": [\n    {\n      "id": "709a83c0-8ec6-4dca-8146-58277a1d3557",\n      "name": "Зал №3 — Суд Ташкента",\n      "state": "ONLINE",\n      "audio": true,\n      "video": true\n    },\n    {\n      "id": "b9a44039-11ab-423f-99f6-c9f6aa744b34",\n      "name": "Иванов Иван",\n      "state": "CALLING",\n      "audio": true,\n      "video": false\n    }\n  ]\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"}],
-        mockResponse:'{\n  "participants": [\n    {\n      "id": "709a83c0-8ec6-4dca-8146-58277a1d3557",\n      "name": "Зал №3 — Суд Ташкента",\n      "uri": "9482634001",\n      "state": "ONLINE",\n      "audio": true,\n      "video": true\n    },\n    {\n      "id": "b9a44039-11ab-423f-99f6-c9f6aa744b34",\n      "name": "Иванов Иван",\n      "uri": "sip:ivanov@smc.sud.uz",\n      "state": "CALLING",\n      "audio": true,\n      "video": false\n    }\n  ]\n}'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'}],
+        mock:'{\n  "participants": [\n    {\n      "id": "709a83c0-8ec6-4dca-8146-58277a1d3557",\n      "name": "Зал №3 — Суд Ташкента",\n      "uri": "9482634001",\n      "state": "ONLINE",\n      "audio": true,\n      "video": true\n    },\n    {\n      "id": "b9a44039-11ab-423f-99f6-c9f6aa744b34",\n      "name": "Иванов Иван",\n      "uri": "sip:ivanov@smc.sud.uz",\n      "state": "CALLING",\n      "audio": true,\n      "video": false\n    }\n  ]\n}'
       },
       {
-        method:"PATCH", path:"/online/conferences/{conferenceId}/status", summary:"Управление — запись, mute, трансляция", isNew:false, locked:true,
-        desc:"Универсальный endpoint управления: старт/стоп записи, включение трансляции, mute всех участников. recordOpType: START | PAUSE | STOP.",
+        method:'PATCH', path:'/online/conferences/{conferenceId}/status', summary:'Управление — запись, mute, трансляция', isNew:false, locked:true,
         info:null,
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID активной конференции"}],
+        desc:'Универсальный endpoint управления: старт/стоп записи, трансляция, mute участников. recordOpType: START | PAUSE | STOP.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID активной конференции'}],
         bodySchema:'{\n  "isMute": true,\n  "recordOp": {\n    "recordOpType": "START",\n    "live": true,\n    "audioRecord": false\n  }\n}',
         responses:[
-          {code:"204",desc:"Операция выполнена",schema:'// No content'},
-          {code:"400",desc:"Неверные параметры",schema:'{\n  "code": 400,\n  "message": "Bad Request"\n}'}
+          {code:'204',desc:'Операция выполнена',schema:'// No content'},
+          {code:'400',desc:'Неверные параметры',schema:'{\n  "code": 400,\n  "message": "Bad Request"\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"}],
-        mockResponse:'// 204 No Content\n// Операция выполнена успешно'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'}],
+        mock:'// 204 No Content\n// Операция выполнена успешно'
       },
       {
-        method:"DELETE", path:"/online/conferences/{conferenceId}", summary:"Завершить конференцию", isNew:false, locked:true,
-        desc:"Завершает активную конференцию. После завершения запись обрабатывается на RSE асинхронно.",
+        method:'DELETE', path:'/online/conferences/{conferenceId}', summary:'Завершить конференцию', isNew:false, locked:true,
         info:null,
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID активной конференции"}],
+        desc:'Завершает активную конференцию. После завершения запись обрабатывается на RSE асинхронно.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID активной конференции'}],
         bodySchema:null,
         responses:[
-          {code:"204",desc:"Конференция завершена",schema:'// No content'},
-          {code:"404",desc:"Конференция не найдена",schema:'{\n  "code": 404,\n  "message": "Conference not found"\n}'}
+          {code:'204',desc:'Конференция завершена',schema:'// No content'},
+          {code:'404',desc:'Конференция не найдена',schema:'{\n  "code": 404,\n  "message": "Conference not found"\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"}],
-        mockResponse:'// 204 No Content\n// Конференция успешно завершена'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'}],
+        mock:'// 204 No Content\n// Конференция успешно завершена'
       }
     ]
   },
   {
-    tag:"live-streaming",
-    tagDesc:"Прямая трансляция и браузерное подключение",
-    endpoints:[
+    tag:'live-streaming', tagDesc:'Прямая трансляция и браузерное подключение',
+    eps:[
       {
-        method:"GET", path:"/live/conference/{conferenceId}", summary:"HLS поток активной конференции", isNew:true, locked:true,
-        desc:"Возвращает HLS-плейлист (.m3u8) прямой трансляции активной конференции. Может быть передан напрямую в HTML5 video player или hls.js без дополнительной авторизации на клиентской стороне.",
-        info:"Новый API. Заменяет liveAddress из GET /conferences/record/{id} который возвращал ссылку на веб-страницу Huawei. Теперь возвращает чистый HLS поток без редиректа.",
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID активной конференции"}],
+        method:'GET', path:'/live/conference/{conferenceId}', summary:'HLS поток активной конференции', isNew:true, locked:true,
+        info:'Новый API. Заменяет liveAddress из GET /conferences/record/{id} который возвращал ссылку на веб-страницу Huawei. Теперь возвращает чистый HLS поток без редиректа.',
+        desc:'Возвращает HLS-плейлист (.m3u8) прямой трансляции. Можно передать напрямую в HTML5 video player или hls.js без дополнительной авторизации на клиентской стороне.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID активной конференции'}],
         bodySchema:null,
         responses:[
-          {code:"200",desc:"HLS плейлист (application/vnd.apple.mpegurl)",schema:'#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-TARGETDURATION:4\n#EXT-X-MEDIA-SEQUENCE:0\n#EXTINF:4.000,\noutput_0.ts\n#EXTINF:4.000,\noutput_1.ts\n#EXTINF:4.000,\noutput_2.ts'},
-          {code:"404",desc:"Конференция не активна",schema:'{\n  "code": 404,\n  "message": "Conference not active"\n}'}
+          {code:'200',desc:'HLS плейлист (application/vnd.apple.mpegurl)',schema:'#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-TARGETDURATION:4\n#EXT-X-MEDIA-SEQUENCE:0\n#EXTINF:4.000,\noutput_0.ts\n#EXTINF:4.000,\noutput_1.ts\n#EXTINF:4.000,\noutput_2.ts'},
+          {code:'404',desc:'Конференция не активна',schema:'{\n  "code": 404,\n  "message": "Conference not active"\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"}],
-        mockResponse:'#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-TARGETDURATION:4\n#EXT-X-MEDIA-SEQUENCE:0\n#EXTINF:4.000,\noutput_0.ts\n#EXTINF:4.000,\noutput_1.ts\n#EXTINF:4.000,\noutput_2.ts\n#EXTINF:4.000,\noutput_3.ts'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'}],
+        mock:'#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-TARGETDURATION:4\n#EXT-X-MEDIA-SEQUENCE:0\n#EXTINF:4.000,\noutput_0.ts\n#EXTINF:4.000,\noutput_1.ts\n#EXTINF:4.000,\noutput_2.ts\n#EXTINF:4.000,\noutput_3.ts'
       },
       {
-        method:"GET", path:"/live/record/{segmentName}.ts", summary:"Сегмент HLS потока", isNew:true, locked:true,
-        desc:"Возвращает бинарный TS-сегмент HLS потока. Вызывается автоматически плеером при воспроизведении .m3u8 плейлиста. Авторизация по JWT — без cookie RSE сессии.",
-        info:"Новый API. Авторизация по JWT вместо cookie RSE сессии которая привязана к домену RSE и недоступна с другого домена.",
-        params:[{name:"segmentName",in:"path",required:true,type:"string",desc:"Имя сегмента без расширения, напр. output_3"}],
+        method:'GET', path:'/live/record/{segmentName}.ts', summary:'Сегмент HLS потока', isNew:true, locked:true,
+        info:'Новый API. Авторизация по JWT вместо cookie RSE сессии которая привязана к домену RSE и недоступна с другого домена.',
+        desc:'Возвращает бинарный TS-сегмент HLS потока. Вызывается автоматически плеером при воспроизведении .m3u8 плейлиста.',
+        params:[{name:'segmentName',in:'path',req:true,type:'string',desc:'Имя сегмента без расширения, напр. output_3'}],
         bodySchema:null,
         responses:[
-          {code:"200",desc:"Бинарный TS-сегмент (video/mp2t)",schema:'// Binary content: video/mp2t'},
-          {code:"404",desc:"Сегмент не найден",schema:'{\n  "code": 404,\n  "message": "Segment not found"\n}'}
+          {code:'200',desc:'Бинарный TS-сегмент (video/mp2t)',schema:'// Binary content: video/mp2t'},
+          {code:'404',desc:'Сегмент не найден',schema:'{\n  "code": 404,\n  "message": "Segment not found"\n}'}
         ],
-        tryParams:[{name:"segmentName",placeholder:"output_3"}],
-        mockResponse:'// 200 OK\n// Content-Type: video/mp2t\n// Content-Length: 188416\n// [Binary TS segment data]'
+        tryFields:[{name:'segmentName',ph:'output_3'}],
+        mock:'// 200 OK\n// Content-Type: video/mp2t\n// Content-Length: 188416\n// [Binary TS segment data]'
       },
       {
-        method:"POST", path:"/conference/{conferenceId}/join", summary:"Параметры для браузерного подключения (WebRTC)", isNew:true, locked:false,
-        desc:"Возвращает параметры для WebRTC подключения к конференции прямо из браузера. Участник передаёт видео и аудио со своего устройства в ВКС Huawei без установки приложений и без перехода на сайт Huawei.",
-        info:"Новый API. Заменяет GET /smc_public/DataConferenceJoin/DataConferenceJoin.html который возвращает HTML страницу Huawei и перенаправляет пользователя на чужой сайт.",
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID активной конференции"}],
+        method:'POST', path:'/conference/{conferenceId}/join', summary:'Параметры для браузерного подключения (WebRTC)', isNew:true, locked:false,
+        info:'Новый API. Заменяет GET /smc_public/DataConferenceJoin/DataConferenceJoin.html который возвращает HTML страницу Huawei и перенаправляет на чужой сайт.',
+        desc:'Возвращает параметры для WebRTC подключения к конференции прямо из браузера. Участник передаёт видео и аудио без установки приложений и без перехода на сайт Huawei.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID активной конференции'}],
         bodySchema:'{\n  "name": "Иванов Иван Иванович",\n  "role": "guest"\n}',
         responses:[
-          {code:"200",desc:"WebRTC параметры подключения",schema:'{\n  "webrtc_url": "wss://smc.sud.uz/webrtc",\n  "sdp_offer_endpoint": "wss://smc.sud.uz/webrtc/3c33b694-...",\n  "join_token": "eyJhbGciOiJIUzI1NiJ9...",\n  "ice_servers": [\n    { "urls": "stun:stun.sud.uz:3478" },\n    {\n      "urls": "turn:turn.sud.uz:3478",\n      "username": "conf_3c33b694",\n      "credential": "temp_cred_abc123"\n    }\n  ],\n  "expiresAt": "2024-11-08T12:30:00Z"\n}'},
-          {code:"404",desc:"Конференция не активна",schema:'{\n  "code": 404,\n  "message": "Conference not active"\n}'}
+          {code:'200',desc:'WebRTC параметры подключения',schema:'{\n  "webrtc_url": "wss://smc.sud.uz/webrtc",\n  "sdp_offer_endpoint": "wss://smc.sud.uz/webrtc/3c33b694-...",\n  "join_token": "eyJhbGciOiJIUzI1NiJ9...",\n  "ice_servers": [\n    { "urls": "stun:stun.sud.uz:3478" },\n    {\n      "urls": "turn:turn.sud.uz:3478",\n      "username": "conf_3c33b694",\n      "credential": "temp_cred_abc123"\n    }\n  ],\n  "expiresAt": "2024-11-08T12:30:00Z"\n}'},
+          {code:'404',desc:'Конференция не активна',schema:'{\n  "code": 404,\n  "message": "Conference not active"\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"},{name:"name",placeholder:"Иванов Иван Иванович"},{name:"role",placeholder:"guest"}],
-        mockResponse:'{\n  "webrtc_url": "wss://smc.sud.uz/webrtc",\n  "sdp_offer_endpoint": "wss://smc.sud.uz/webrtc/3c33b694-ee6a-4034-8715-2746d818b352",\n  "join_token": "eyJhbGciOiJIUzI1NiJ9.eyJjb25mSWQiOiIzYzMzYjY5NCIsIm5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJyb2xlIjoiZ3Vlc3QifQ.mock_sig",\n  "ice_servers": [\n    { "urls": "stun:stun.sud.uz:3478" },\n    {\n      "urls": "turn:turn.sud.uz:3478",\n      "username": "conf_3c33b694",\n      "credential": "temp_cred_abc123"\n    }\n  ],\n  "expiresAt": "2024-11-08T12:30:00Z"\n}'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'},{name:'name',ph:'Иванов Иван Иванович'},{name:'role',ph:'guest'}],
+        mock:'{\n  "webrtc_url": "wss://smc.sud.uz/webrtc",\n  "sdp_offer_endpoint": "wss://smc.sud.uz/webrtc/3c33b694-ee6a-4034-8715-2746d818b352",\n  "join_token": "eyJhbGciOiJIUzI1NiJ9.eyJjb25mSWQiOiIzYzMzYjY5NCIsIm5hbWUiOiLQmNCy0LDQvdC-0LIg0JjQstCw0L0iLCJyb2xlIjoiZ3Vlc3QifQ.mock_sig",\n  "ice_servers": [\n    { "urls": "stun:stun.sud.uz:3478" },\n    {\n      "urls": "turn:turn.sud.uz:3478",\n      "username": "conf_3c33b694",\n      "credential": "temp_cred_abc123"\n    }\n  ],\n  "expiresAt": "2024-11-08T12:30:00Z"\n}'
       },
       {
-        method:"WS", path:"wss://smc.sud.uz/webrtc/{conferenceId}", summary:"WebRTC signaling — SDP обмен", isNew:true, locked:false,
-        desc:"Браузер устанавливает WebSocket соединение используя sdp_offer_endpoint из POST /conference/{id}/join, передаёт SDP offer и получает SDP answer от MCU Huawei. После signaling медиапоток идёт напрямую через DTLS/SRTP.",
-        info:"Новый API. WebSocket endpoint для SDP обмена и ICE negotiation.",
-        params:[{name:"conferenceId",in:"path",required:true,type:"string (uuid)",desc:"ID активной конференции"}],
+        method:'WS', path:'wss://smc.sud.uz/webrtc/{conferenceId}', summary:'WebRTC signaling — SDP обмен', isNew:true, locked:false,
+        info:'Новый API. WebSocket endpoint для SDP обмена и ICE negotiation. После signaling медиапоток идёт напрямую через DTLS/SRTP.',
+        desc:'Браузер устанавливает WebSocket соединение используя sdp_offer_endpoint из POST /conference/{id}/join, передаёт SDP offer и получает SDP answer от MCU Huawei.',
+        params:[{name:'conferenceId',in:'path',req:true,type:'string (uuid)',desc:'ID активной конференции'}],
         bodySchema:'{\n  "type": "offer",\n  "join_token": "eyJhbGciOiJIUzI1NiJ9...",\n  "sdp": "v=0\\r\\no=- 123456789 2 IN IP4 127.0.0.1\\r\\ns=-\\r\\n..."\n}',
         responses:[
-          {code:"200",desc:"SDP answer от MCU",schema:'{\n  "type": "answer",\n  "sdp": "v=0\\r\\no=- 987654321 2 IN IP4 192.168.1.100\\r\\ns=-\\r\\n..."\n}'}
+          {code:'200',desc:'SDP answer от MCU',schema:'{\n  "type": "answer",\n  "sdp": "v=0\\r\\no=- 987654321 2 IN IP4 192.168.1.100\\r\\ns=-\\r\\n..."\n}'}
         ],
-        tryParams:[{name:"conferenceId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"},{name:"join_token",placeholder:"eyJhbGciOiJIUzI1NiJ9..."}],
-        mockResponse:'{\n  "type": "answer",\n  "sdp": "v=0\\r\\no=- 987654321 2 IN IP4 192.168.1.100\\r\\ns=-\\r\\nt=0 0\\r\\na=group:BUNDLE 0 1\\r\\nm=audio 9 UDP/TLS/RTP/SAVPF 111\\r\\na=rtcp:9 IN IP4 0.0.0.0\\r\\na=ice-ufrag:mock_ufrag\\r\\na=ice-pwd:mock_password_here\\r\\na=setup:passive\\r\\n"\n}'
+        tryFields:[{name:'conferenceId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'},{name:'join_token',ph:'eyJhbGciOiJIUzI1NiJ9...'}],
+        mock:'{\n  "type": "answer",\n  "sdp": "v=0\\r\\no=- 987654321 2 IN IP4 192.168.1.100\\r\\ns=-\\r\\nt=0 0\\r\\na=group:BUNDLE 0 1\\r\\nm=audio 9 UDP/TLS/RTP/SAVPF 111\\r\\na=ice-ufrag:mock_ufrag\\r\\na=ice-pwd:mock_password_here\\r\\n"\n}'
       }
     ]
   },
   {
-    tag:"recording",
-    tagDesc:"Записи конференций (RSE8800A)",
-    endpoints:[
+    tag:'recording', tagDesc:'Записи конференций (RSE8800A)',
+    eps:[
       {
-        method:"GET", path:"/conf-portal/conferences/external/recordAddress/{id}", summary:"Список адресов записей конференции", isNew:false, locked:true,
-        desc:"Возвращает список записей завершённой конференции. Каждая запись содержит ticket (TTL 3 минуты) и addressItem — URL для скачивания через RSE. Ticket необходимо использовать немедленно.",
+        method:'GET', path:'/conf-portal/conferences/external/recordAddress/{id}', summary:'Список адресов записей', isNew:false, locked:true,
         info:null,
-        params:[{name:"id",in:"path",required:true,type:"string (uuid)",desc:"ID конференции в SMC"}],
+        desc:'Возвращает список записей завершённой конференции. Каждая запись содержит ticket (TTL 3 минуты) и addressItem — URL для скачивания через RSE.',
+        params:[{name:'id',in:'path',req:true,type:'string (uuid)',desc:'ID конференции в SMC'}],
         bodySchema:null,
         responses:[
-          {code:"200",desc:"Список адресов записей",schema:'{\n  "subject": "Судебное заседание №2024-1234",\n  "recordAddresses": [\n    {\n      "ticket": "f8fac1d4e484c0105d97cc0cbf7d4d323b84996c0137acef05add499eca551d0",\n      "addressItem": "https://rse1.sud.uz/...?recordId=c8067816-167a-4d4f-97f6-6e97d8ee6ea6"\n    }\n  ]\n}'},
-          {code:"404",desc:"Записи не найдены",schema:'{\n  "code": 404,\n  "message": "No records found"\n}'}
+          {code:'200',desc:'Список адресов записей',schema:'{\n  "subject": "Судебное заседание №2024-1234",\n  "recordAddresses": [\n    {\n      "ticket": "f8fac1d4e484c0105d97cc0cbf7d4d323b84996c...",\n      "addressItem": "https://rse1.sud.uz/...?recordId=c8067816-..."\n    }\n  ]\n}'},
+          {code:'404',desc:'Записи не найдены',schema:'{\n  "code": 404,\n  "message": "No records found"\n}'}
         ],
-        tryParams:[{name:"id",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"}],
-        mockResponse:'{\n  "subject": "Судебное заседание №2024-1234",\n  "recordAddresses": [\n    {\n      "ticket": "f8fac1d4e484c0105d97cc0cbf7d4d323b84996c0137acef05add499eca551d0",\n      "addressItem": "https://rse1.sud.uz/rse/rest/bnms/download?recordId=c8067816-167a-4d4f-97f6-6e97d8ee6ea6"\n    }\n  ]\n}'
+        tryFields:[{name:'id',ph:'3c33b694-ee6a-4034-8715-2746d818b352'}],
+        mock:'{\n  "subject": "Судебное заседание №2024-1234",\n  "recordAddresses": [\n    {\n      "ticket": "f8fac1d4e484c0105d97cc0cbf7d4d323b84996c0137acef05add499eca551d0",\n      "addressItem": "https://rse1.sud.uz/rse/rest/bnms/download?recordId=c8067816-167a-4d4f-97f6-6e97d8ee6ea6"\n    }\n  ]\n}'
       },
       {
-        method:"GET", path:"/rse/rest/bnms/download/limit/3rdParty/downloadMedia", summary:"Скачать файл записи (.ts)", isNew:false, locked:true,
-        desc:"Скачивает файл записи с RSE сервера. Требует ticket полученный из /recordAddress. Ticket действует 3 минуты — необходимо инициировать скачивание сразу после получения.",
+        method:'GET', path:'/rse/rest/bnms/download/limit/3rdParty/downloadMedia', summary:'Скачать файл записи (.ts)', isNew:false, locked:true,
         info:null,
+        desc:'Скачивает файл записи с RSE сервера. Требует ticket полученный из /recordAddress. Ticket действует 3 минуты.',
         params:[
-          {name:"confId",in:"query",required:true,type:"string (uuid)",desc:"ID конференции"},
-          {name:"recordId",in:"query",required:true,type:"string (uuid)",desc:"ID файла записи"},
-          {name:"mediaType",in:"query",required:true,type:"enum",desc:"videoHD | videoSD | videoAux"},
-          {name:"ticket",in:"query",required:true,type:"string",desc:"Ticket из /recordAddress. TTL: 3 минуты"}
+          {name:'confId',in:'query',req:true,type:'string (uuid)',desc:'ID конференции'},
+          {name:'recordId',in:'query',req:true,type:'string (uuid)',desc:'ID файла записи'},
+          {name:'mediaType',in:'query',req:true,type:'enum',desc:'videoHD | videoSD | videoAux'},
+          {name:'ticket',in:'query',req:true,type:'string',desc:'Ticket из /recordAddress. TTL: 3 минуты'}
         ],
         bodySchema:null,
         responses:[
-          {code:"200",desc:"Бинарный файл записи (video/mp2t)",schema:'// Binary content: video/mp2t (.ts file)'},
-          {code:"400",desc:"Ticket истёк или неверный",schema:'{\n  "resultCode": 10001,\n  "resultDesc": "tickets info not exist or expire"\n}'}
+          {code:'200',desc:'Бинарный файл (video/mp2t)',schema:'// Binary content: video/mp2t (.ts file)'},
+          {code:'400',desc:'Ticket истёк или неверный',schema:'{\n  "resultCode": 10001,\n  "resultDesc": "tickets info not exist or expire"\n}'}
         ],
-        tryParams:[{name:"confId",placeholder:"3c33b694-ee6a-4034-8715-2746d818b352"},{name:"recordId",placeholder:"c8067816-167a-4d4f-97f6-6e97d8ee6ea6"},{name:"mediaType",placeholder:"videoHD"},{name:"ticket",placeholder:"f8fac1d4e484c010..."}],
-        mockResponse:'// 200 OK\n// Content-Type: video/mp2t\n// Content-Disposition: attachment; filename="record_3c33b694_videoHD.ts"\n// Content-Length: 524288000\n// [Binary TS recording data — 500MB]'
+        tryFields:[{name:'confId',ph:'3c33b694-ee6a-4034-8715-2746d818b352'},{name:'recordId',ph:'c8067816-167a-4d4f-97f6-6e97d8ee6ea6'},{name:'mediaType',ph:'videoHD'},{name:'ticket',ph:'f8fac1d4e484c010...'}],
+        mock:'// 200 OK\n// Content-Type: video/mp2t\n// Content-Disposition: attachment; filename="record_3c33b694_videoHD.ts"\n// Content-Length: 524288000\n// [Binary TS recording data]'
       },
       {
-        method:"GET", path:"/rse/sdk/rest/vod/getrecordinfo", summary:"Получить m3u8 адрес для воспроизведения", isNew:false, locked:true,
-        desc:"Возвращает адреса потоков для воспроизведения записи. Авторизация по JWT — без cookie RSE сессии.",
+        method:'GET', path:'/rse/sdk/rest/vod/getrecordinfo', summary:'Получить m3u8 адрес для воспроизведения', isNew:false, locked:true,
         info:null,
+        desc:'Возвращает адреса потоков для воспроизведения записи. Авторизация по JWT — без cookie RSE сессии.',
         params:[
-          {name:"ticket",in:"query",required:true,type:"string",desc:"Ticket из /recordAddress"},
-          {name:"recordId",in:"query",required:true,type:"string (uuid)",desc:"ID записи"}
+          {name:'ticket',in:'query',req:true,type:'string',desc:'Ticket из /recordAddress'},
+          {name:'recordId',in:'query',req:true,type:'string (uuid)',desc:'ID записи'}
         ],
         bodySchema:null,
         responses:[
-          {code:"200",desc:"Адреса потоков",schema:'{\n  "resultCode": 0,\n  "viewInfo": [\n    {\n      "mainStreamHdUrl": "/play/typeOne/video/resource/987ff417-.../videoHD/0_0.m3u8",\n      "mainStreamSdUrl": "/play/typeOne/video/resource/987ff417-.../videoSD/0_0.m3u8",\n      "subStreamUrl": "/play/typeOne/video/resource/987ff417-.../videoAux/0_0.m3u8"\n    }\n  ]\n}'}
+          {code:'200',desc:'Адреса потоков',schema:'{\n  "resultCode": 0,\n  "viewInfo": [\n    {\n      "mainStreamHdUrl": "/play/typeOne/video/resource/987ff417-.../videoHD/0_0.m3u8",\n      "mainStreamSdUrl": "/play/typeOne/video/resource/987ff417-.../videoSD/0_0.m3u8"\n    }\n  ]\n}'}
         ],
-        tryParams:[{name:"ticket",placeholder:"f8fac1d4e484c010..."},{name:"recordId",placeholder:"c8067816-167a-4d4f-97f6-6e97d8ee6ea6"}],
-        mockResponse:'{\n  "resultCode": 0,\n  "viewInfo": [\n    {\n      "mainStreamHdUrl": "/play/typeOne/video/resource/987ff417-8dc7-4377-8960-2e1f534b0f5e/videoHD/0_0.m3u8",\n      "mainStreamSdUrl": "/play/typeOne/video/resource/987ff417-8dc7-4377-8960-2e1f534b0f5e/videoSD/0_0.m3u8",\n      "subStreamUrl": "/play/typeOne/video/resource/987ff417-8dc7-4377-8960-2e1f534b0f5e/videoAux/0_0.m3u8"\n    }\n  ]\n}'
+        tryFields:[{name:'ticket',ph:'f8fac1d4e484c010...'},{name:'recordId',ph:'c8067816-167a-4d4f-97f6-6e97d8ee6ea6'}],
+        mock:'{\n  "resultCode": 0,\n  "viewInfo": [\n    {\n      "mainStreamHdUrl": "/play/typeOne/video/resource/987ff417-8dc7-4377-8960-2e1f534b0f5e/videoHD/0_0.m3u8",\n      "mainStreamSdUrl": "/play/typeOne/video/resource/987ff417-8dc7-4377-8960-2e1f534b0f5e/videoSD/0_0.m3u8",\n      "subStreamUrl": "/play/typeOne/video/resource/987ff417-8dc7-4377-8960-2e1f534b0f5e/videoAux/0_0.m3u8"\n    }\n  ]\n}'
       }
     ]
   }
 ];
 
-var methodColor = {POST:'t-post',GET:'t-get',DELETE:'t-delete',PATCH:'t-patch',WS:'t-ws'};
-var methodRow = {POST:'row-post',GET:'row-get',DELETE:'row-delete',PATCH:'row-patch',WS:'row-ws'};
-var respClass = {'200':'r200','204':'r204','400':'r400','401':'r401','404':'r404'};
-
-function buildTry(ep, idx){
-  var paramInputs = ep.tryParams.map(function(p){
-    return '<div class="try-param-row"><span class="try-param-label">'+p.name+'</span><input class="try-input" id="tryp_'+idx+'_'+p.name+'" placeholder="'+p.placeholder+'" value="'+p.placeholder+'"></div>';
-  }).join('');
-  var bodyArea = ep.bodySchema ? '<div style="margin-bottom:6px;font-size:12px;font-weight:700;color:#3b4151">Request body</div><textarea class="try-textarea" id="trybody_'+idx+'">'+ep.bodySchema+'</textarea>' : '';
-  return '<div class="try-section"><div class="try-title">Parameters</div><div class="try-params">'+paramInputs+'</div>'+bodyArea+'<button class="try-btn" onclick="execTry('+idx+')">Execute</button><div class="try-result" id="tryresult_'+idx+'"><div class="try-result-label">Curl</div><div class="try-curl" id="trycurl_'+idx+'"></div><div class="try-result-label">Response code</div><div class="try-response-code code-green" id="trycode_'+idx+'"></div><div class="try-result-label">Response body</div><div class="try-response-body" id="trybody_resp_'+idx+'"></div></div></div>';
-}
-
-function execTry(idx){
-  var ep = allEps[idx];
-  var params = {};
-  ep.tryParams.forEach(function(p){
-    var el = document.getElementById('tryp_'+idx+'_'+p.name);
-    if(el) params[p.name] = el.value;
-  });
-  var path = ep.path;
-  Object.keys(params).forEach(function(k){ path = path.replace('{'+k+'}',params[k]); });
-  var curlStr = 'curl -X '+ep.method+' "https://smc.sud.uz'+path+'" \\\n  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..." \\\n  -H "Content-Type: application/json"';
-  var bodyEl = document.getElementById('trybody_'+idx);
-  if(bodyEl && bodyEl.tagName==='TEXTAREA' && bodyEl.value){
-    curlStr += ' \\\n  -d \''+bodyEl.value.replace(/\n/g,'\\n')+'\'';
-  }
-  document.getElementById('trycurl_'+idx).textContent = curlStr;
-  document.getElementById('trycode_'+idx).textContent = '200 OK';
-  document.getElementById('trybody_resp_'+idx).textContent = ep.mockResponse;
-  document.getElementById('tryresult_'+idx).classList.add('show');
-}
-
 var allEps = [];
 var main = document.getElementById('main');
 
-ENDPOINTS.forEach(function(tag){
-  var tagId = 'tag_'+tag.tag;
-  var block = document.createElement('div');
-  block.className = 'tag-block';
+DEFS.forEach(function(tagDef){
+  var tagBlock = document.createElement('div');
+  tagBlock.className = 'tag-block';
 
+  // tag header
   var hdr = document.createElement('div');
   hdr.className = 'tag-header';
-  hdr.innerHTML = '<span class="tag-title">'+tag.tag+'</span><span class="tag-desc-text">'+tag.tagDesc+'</span><span class="tag-chevron" id="tchev_'+tagId+'">∧</span>';
-  hdr.onclick = function(){
-    var body = document.getElementById('tbody_'+tagId);
-    var chev = document.getElementById('tchev_'+tagId);
-    var open = body.style.display !== 'none';
-    body.style.display = open ? 'none' : 'block';
-    chev.classList.toggle('closed', open);
-    chev.textContent = open ? '∨' : '∧';
-  };
-  block.appendChild(hdr);
+  var arrowId = 'tarrow_' + tagDef.tag;
+  var bodyId  = 'tbody_'  + tagDef.tag;
+  hdr.innerHTML = '<span class="tag-title">'+tagDef.tag+'</span>'
+    + '<span class="tag-subdesc">'+tagDef.tagDesc+'</span>'
+    + '<span class="tag-arrow" id="'+arrowId+'">∧</span>';
+  hdr.addEventListener('click', function(){
+    var b = document.getElementById(bodyId);
+    var a = document.getElementById(arrowId);
+    var open = b.style.display !== 'none';
+    b.style.display = open ? 'none' : 'block';
+    a.classList.toggle('closed', open);
+    a.textContent = open ? '∨' : '∧';
+  });
+  tagBlock.appendChild(hdr);
 
-  var tbody = document.createElement('div');
-  tbody.className = 'ep-wrap';
-  tbody.id = 'tbody_'+tagId;
+  var tagBody = document.createElement('div');
+  tagBody.id = bodyId;
 
-  tag.endpoints.forEach(function(ep){
+  tagDef.eps.forEach(function(ep){
     var idx = allEps.length;
     allEps.push(ep);
 
-    var row = document.createElement('div');
-    row.className = 'ep-row '+(methodRow[ep.method]||'row-get');
+    var epBlock = document.createElement('div');
+    epBlock.className = 'ep-block';
 
-    var bar = document.createElement('div');
-    bar.className = 'ep-summary-bar';
-    bar.innerHTML = '<span class="method-tag '+(methodColor[ep.method]||'t-get')+'">'+ep.method+'</span>'
-      +'<span class="ep-path">'+ep.path+'</span>'
-      +(ep.isNew?'<span class="new-tag">NEW</span>':'')
-      +'<span class="ep-op-summary">'+ep.summary+'</span>'
-      +(ep.locked?'<span class="ep-lock">🔒</span>':'')
-      +'<span class="ep-chevron-sm" id="epchev_'+idx+'">▼</span>';
-    bar.onclick = function(){
-      var d = document.getElementById('epdetail_'+idx);
-      var ch = document.getElementById('epchev_'+idx);
-      var open = d.classList.contains('open');
-      d.classList.toggle('open',!open);
-      ch.classList.toggle('open',!open);
-      row.classList.toggle('open',!open);
-    };
-    row.appendChild(bar);
+    // summary row
+    var sumRow = document.createElement('div');
+    sumRow.className = 'ep-summary ' + (sumClass[ep.method]||'m-get');
+    var detailId = 'epd_' + idx;
+    var arrowSpId = 'epa_' + idx;
+    sumRow.innerHTML =
+      '<span class="method-pill '+(pillClass[ep.method]||'pill-get')+'">'+ep.method+'</span>'
+      + '<span class="ep-path-text">'+ep.path+'</span>'
+      + (ep.isNew ? '<span class="new-pill">NEW</span>' : '')
+      + '<span class="ep-op-text">'+ep.summary+'</span>'
+      + (ep.locked ? '<span class="ep-lock">🔒</span>' : '')
+      + '<span class="ep-arrow" id="'+arrowSpId+'">▼</span>';
 
-    var detail = document.createElement('div');
-    detail.className = 'ep-detail';
-    detail.id = 'epdetail_'+idx;
+    sumRow.addEventListener('click', function(){
+      var det = document.getElementById(detailId);
+      var arr = document.getElementById(arrowSpId);
+      var nowOpen = det.classList.contains('open');
+      det.classList.toggle('open', !nowOpen);
+      arr.classList.toggle('open', !nowOpen);
+      sumRow.classList.toggle('open', !nowOpen);
+    });
+    epBlock.appendChild(sumRow);
+
+    // detail panel
+    var det = document.createElement('div');
+    det.className = 'ep-detail';
+    det.id = detailId;
 
     var html = '';
+
     if(ep.info){
       html += '<div class="info-note">ℹ️ '+ep.info+'</div>';
     }
-    html += '<p class="desc-text">'+ep.desc+'</p>';
+    html += '<p class="desc-p">'+ep.desc+'</p>';
 
     if(ep.params && ep.params.length){
-      html += '<div class="detail-section"><div class="detail-section-title">Parameters</div><table class="params-table"><tr><th>Name</th><th>In</th><th>Type</th><th>Required</th><th>Description</th></tr>';
+      html += '<div class="section-title">Parameters</div>';
+      html += '<table class="params-tbl"><thead><tr><th>Name</th><th>In</th><th>Type</th><th>Required</th><th>Description</th></tr></thead><tbody>';
       ep.params.forEach(function(p){
-        html += '<tr><td><b>'+p.name+'</b></td><td>'+p.in+'</td><td><span class="type-str">'+p.type+'</span></td><td>'+(p.required?'<span class="req-star">*</span>required':'optional')+'</td><td>'+p.desc+'</td></tr>';
+        html += '<tr><td><b>'+p.name+'</b></td><td>'+p.in+'</td>'
+          +'<td><span class="type-label">'+p.type+'</span></td>'
+          +'<td>'+(p.req?'<span class="req-mark">* required</span>':'optional')+'</td>'
+          +'<td>'+p.desc+'</td></tr>';
       });
-      html += '</table></div>';
+      html += '</tbody></table>';
     }
 
     if(ep.bodySchema){
-      html += '<div class="detail-section"><div class="detail-section-title">Request body</div><div class="model-schema">'+ep.bodySchema.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></div>';
+      html += '<div class="section-title" style="margin-top:16px">Request body</div>';
+      html += '<div class="schema-box">'+escHtml(ep.bodySchema)+'</div>';
     }
 
-    if(ep.responses && ep.responses.length){
-      html += '<div class="detail-section"><div class="detail-section-title">Responses</div><div class="resp-list">';
-      ep.responses.forEach(function(r,ri){
-        var rid = 'resp_'+idx+'_'+ri;
-        html += '<div class="resp-item"><div class="resp-head" onclick="toggleResp(\''+rid+'\')">'
-          +'<span class="resp-code-badge '+(respClass[r.code]||'r200')+'">'+r.code+'</span>'
-          +'<span class="resp-desc">'+r.desc+'</span>'
-          +'<span>▼</span>'
-          +'</div><div class="resp-body" id="'+rid+'"><div class="model-schema">'+r.schema.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</div></div></div>';
+    html += '<div class="section-title" style="margin-top:16px">Responses</div>';
+    ep.responses.forEach(function(r, ri){
+      var rbId = 'rb_'+idx+'_'+ri;
+      html += '<div class="resp-accordion">'
+        +'<div class="resp-head" onclick="toggleRb(\''+rbId+'\')">'
+        +'<span class="r-badge '+(rcClass[r.code]||'r200')+'">'+r.code+'</span>'
+        +'<span class="resp-label">'+r.desc+'</span>'
+        +'<span>▼</span>'
+        +'</div>'
+        +'<div class="resp-body-box" id="'+rbId+'">'
+        +'<div class="schema-box">'+escHtml(r.schema)+'</div>'
+        +'</div></div>';
+    });
+
+    // Try it
+    html += '<div class="try-box">';
+    html += '<div class="try-box-title">Try it out</div>';
+    if(ep.tryFields && ep.tryFields.length){
+      html += '<div>';
+      ep.tryFields.forEach(function(f){
+        html += '<div class="try-field-row">'
+          +'<span class="try-field-name">'+f.name+'</span>'
+          +'<input class="try-input" id="tf_'+idx+'_'+f.name+'" value="'+escAttr(f.ph)+'" placeholder="'+escAttr(f.ph)+'">'
+          +'</div>';
       });
-      html += '</div></div>';
+      html += '</div>';
     }
+    if(ep.bodySchema){
+      html += '<div style="font-size:12px;font-weight:700;color:#555;margin-bottom:4px;margin-top:6px">Request body</div>';
+      html += '<textarea class="try-textarea" id="tbody_'+idx+'">'+escHtml(ep.bodySchema)+'</textarea>';
+    }
+    html += '<button class="execute-btn" onclick="doExec('+idx+')">Execute</button>';
+    html += '<button class="clear-btn" onclick="doClear('+idx+')">Clear</button>';
+    html += '<div class="try-result" id="tres_'+idx+'">'
+      +'<div class="result-label">Curl</div>'
+      +'<div class="curl-box" id="tcurl_'+idx+'"></div>'
+      +'<div class="result-label">Response code</div>'
+      +'<div class="resp-code-text" id="tcode_'+idx+'"></div>'
+      +'<div class="result-label">Response body</div>'
+      +'<div class="resp-body-result" id="tresp_'+idx+'"></div>'
+      +'</div>';
+    html += '</div>';
 
-    html += buildTry(ep, idx);
-
-    detail.innerHTML = html;
-    row.appendChild(detail);
-    tbody.appendChild(row);
+    det.innerHTML = html;
+    epBlock.appendChild(det);
+    tagBody.appendChild(epBlock);
   });
 
-  block.appendChild(tbody);
-  main.appendChild(block);
+  tagBlock.appendChild(tagBody);
+  main.appendChild(tagBlock);
 });
 
-function toggleResp(id){
+function escHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function escAttr(s){ return s.replace(/"/g,'&quot;'); }
+
+function toggleRb(id){
   var el = document.getElementById(id);
-  el.classList.toggle('open');
+  if(el) el.classList.toggle('open');
+}
+
+function doExec(idx){
+  var ep = allEps[idx];
+  var vals = {};
+  if(ep.tryFields){
+    ep.tryFields.forEach(function(f){
+      var el = document.getElementById('tf_'+idx+'_'+f.name);
+      if(el) vals[f.name] = el.value || f.ph;
+    });
+  }
+  var path = ep.path;
+  Object.keys(vals).forEach(function(k){ path = path.replace('{'+k+'}', vals[k]); });
+
+  var curlParts = ['curl -X '+ep.method+' "https://smc.sud.uz'+path+'"',
+    '  -H "Authorization: Bearer eyJhbGciOiJIUzI1NiJ9..."',
+    '  -H "Content-Type: application/json"'];
+  var tbody = document.getElementById('tbody_'+idx);
+  if(tbody && tbody.value.trim()){
+    curlParts.push("  -d '"+tbody.value.replace(/\n/g,' ')+"'");
+  }
+  document.getElementById('tcurl_'+idx).textContent = curlParts.join(' \\\n');
+  document.getElementById('tcode_'+idx).textContent = '200';
+  document.getElementById('tresp_'+idx).textContent = ep.mock;
+  document.getElementById('tres_'+idx).classList.add('show');
+}
+
+function doClear(idx){
+  document.getElementById('tres_'+idx).classList.remove('show');
 }
 </script>
 </body>
